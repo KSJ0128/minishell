@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 17:07:27 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/18 21:37:54 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/08/24 15:37:47 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ void	tokenize(char *line, t_envi *envi)
 		}
 		idx++;
 	}
-	add_token(line, envi, start, idx); // 널 문자 만났을 때 토큰 추가
+	if (idx != 0)
+		add_token(line, envi, start, idx); // 널 문자 만났을 때 토큰 추가
 }
 
 // 토큰 내 따옴표 제거
@@ -74,7 +75,7 @@ void	remove_quote(t_envi *envi)
 	int		idx;
 
 	now = envi->tokens;
-	while (now != NULL)
+	while (now != NULL && now->data != NULL)
 	{
 		str = now->data;
 		tmp = (char *)malloc(sizeof(char) * (ft_strlen(str) + 1));

@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 11:36:17 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/18 21:41:16 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/08/24 15:35:36 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	expand_var(char **envp, t_envi *envi)
 	int		idx;
 
 	now = envi->tokens;
-	while (now != NULL)
+	while (now != NULL && now->data != NULL)
 	{
 		idx = 0;
 		while (now->data[idx] != '\0')

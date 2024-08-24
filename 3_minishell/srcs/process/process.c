@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 14:13:47 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/18 21:42:54 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/08/24 15:37:56 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void	make_process(t_envi *envi)
 
 	now = envi->tokens;
 	proc = envi->procs;
-	while (now != NULL)
+	while (now != NULL && now->data != NULL)
 	{
 		if (ft_strncmp(now->data, "|", ft_strlen(now->data)) == 0)
 			push_proc(proc);

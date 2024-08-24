@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:32:58 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/18 21:57:25 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/08/24 15:39:50 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	setting(t_envi *envi)
 // 프로세스 구조체 테스트 출력용 함수입니다.
 void print_processes(t_process *proc) {
     int idx = 0;
-    while (proc != NULL) {
+    while (proc != NULL && (proc->files != NULL || proc->redirs != NULL)) {
         printf("%d번째 프로세스\n", idx);
 
         // 파일 리스트 출력
@@ -63,6 +63,8 @@ void print_processes(t_process *proc) {
         proc = proc->next;
         idx++;
     }
+	if (idx == 0)
+		printf("프로세스가 존재하지 않습니다.\n");
 }
 
 int	main(int argc, char **argv, char **envp)
