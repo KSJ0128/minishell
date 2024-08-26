@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:47:22 by seungbel          #+#    #+#             */
-/*   Updated: 2024/08/26 13:30:44 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/08/26 22:12:44 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,23 +141,8 @@ char	*find_path(char *cmd, char **envp)
 	return (0);
 }
 
-// 유효한 path가 있으면 실행 없으면, cmd없다는 메세지 내보내기
-void	ft_execve(t_process *proc, char **envp)
-{
-	char	*cmd;
-	char	*cmd_path;
-	char	**arg;
-
-	cmd = proc->files->data;
-	cmd_path = find_path(cmd, envp);
-	if (!cmd_path)
-		send_sigusr2();
-	arg = mk_arg(proc);
-	execve(cmd_path, arg, envp); // arg[0]과 cmd_path가 같지 않아도 되는지? 만약 같아야 된다면 mk_arg 변경 필요
-}
-
 // file->data를 모아서 char **arg를 만들어 줌
-char	**mk_arg(t_process *proc)
+char	**mk_arg(t_process *proc, char *cmd_path)
 {
 	t_file	*file;
 	char	**arg;
@@ -172,7 +157,10 @@ char	**mk_arg(t_process *proc)
 	idx = 0;
 	while (file)
 	{
-		arg[idx] = ft_strdup(file->data);
+		if (idx == 0)
+			arg[idx] = ft_strdup(cmd_path);
+		else
+			arg[idx] = ft_strdup(file->data);
 		if (!arg[idx])
 			send_sigusr1();
 		idx++;
@@ -182,11 +170,27 @@ char	**mk_arg(t_process *proc)
 	return (arg);
 }
 
+// 유효한 path가 있으면 실행 없으면, cmd없다는 메세지 내보내기
+void	ft_execve(t_process *proc, char **envp)
+{
+	char	*cmd;
+	char	*cmd_path;
+	char	**arg;
+
+	cmd = proc->files->data;
+	cmd_path = find_path(cmd, envp);
+	if (!cmd_path)
+		send_sigusr2();
+	arg = mk_arg(proc, cmd_path);
+	execve(cmd_path, arg, envp); // arg[0]과 cmd_path가 같지 않아도 되는지? 만약 같아야 된다면 mk_arg 변경 필요
+}
+
 void	execute(t_envi	*envi, char ***envp)
 {
 	t_process	*proc;
 	int			proc_num;
-	// int			pipe_fd[2];
+	int			pipe_fd[2];
+	int			rem_fd;
 	pid_t		pid;
 
 	proc = envi->procs;
@@ -199,31 +203,50 @@ void	execute(t_envi	*envi, char ***envp)
 		{
 			pid = fork();
 			if (pid == -1)
-				handle_error(2); // 고치기
+				handle_error(2);
 			else if (pid == 0)
 				ft_execve(proc, *envp);
 			else
-				wait(NULL);
+				waitpid(pid, 0, NULL); // 그냥 쓴거
 		}
 	}
-	// else
-	// {
-	// 	pipe(pipe_fd);
-	// 	while (proc)
-	// 	{
-	// 		pid = fork();
-	// 		if (pid == -1)
-	// 			handle_error(2);
-	// 		else if (pid == 0)
-	// 		{
-	// 			if (ck_is_builtin(proc))
-	// 				exc_builtin(proc, envp);
-	// 			else
-	// 				ft_execve(proc, *envp);
-	// 		}
-	// 		else
-	// 			wait(NULL);
-	// 	}
-	// 	proc = proc->next;
-	// }
+	else
+	{
+		rem_fd = -1;
+		while (proc)
+		{
+			pipe(pipe_fd);
+			pid = fork();
+			if (pid == -1)
+				handle_error(2);
+			else if (pid == 0)
+			{
+				if (proc->next)
+					dup2(pipe_fd[1], 1);
+				close(pipe_fd[1]);
+				if (rem_fd != -1)
+				{
+					dup2(rem_fd, 0);
+					close(rem_fd);
+				}
+				close(pipe_fd[0]);
+				if (ck_is_builtin(proc))
+					exc_builtin(proc, envp);
+				else
+					ft_execve(proc, *envp);
+			}
+			else
+			{
+				close(pipe_fd[1]);
+				if (rem_fd != -1)
+					close(rem_fd);
+				if (proc->next)
+					rem_fd = pipe_fd[0];
+				else
+					close(pipe_fd[0]);
+			}
+			proc = proc->next;
+		}
+		waitpid(pid, 0, NULL); // 그냥 쓴거
+	}
 }

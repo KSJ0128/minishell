@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:33:42 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/26 13:29:21 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/08/26 21:13:02 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,12 +142,11 @@ int		ft_lstlen(char **lst);
 void	free_lst(char **lst);
 int		proc_len(t_process *proc);
 int		ft_filelen(t_file *file);
-char	**mk_arg(t_process *proc);
+char	**mk_arg(t_process *proc, char *cmd_path);
 
 // handle_signal.c
 void	handle_sigusr1(int sig);
 void	handle_sigusr2(int sig);
 void	send_sigusr1(void);
 void	send_sigusr2(void);
-
 #endif
