@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 11:10:21 by seungbel          #+#    #+#             */
-/*   Updated: 2024/08/20 11:26:29 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/08/27 17:56:30 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_cd(t_file *file)
 
 	if (!file)
 		return ;
-	path = file->data;
+	path = file->data; // ~가 path에 포함되어 있을 경우 처리
 	if (chdir(path) != 0)
 		perror("cd Error:");
 }

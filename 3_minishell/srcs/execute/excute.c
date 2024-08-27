@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:47:22 by seungbel          #+#    #+#             */
-/*   Updated: 2024/08/27 14:13:33 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/08/27 19:06:46 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ char	**mk_arg(t_process *proc, char *cmd_path)
 	file_len = ft_filelen(file);
 	arg = (char **)malloc(sizeof(char *) * (file_len + 1));
 	if (!arg)
-		send_sigusr1();
+		kill(0, SIGUSR1);
 	idx = 0;
 	while (file)
 	{
@@ -162,7 +162,7 @@ char	**mk_arg(t_process *proc, char *cmd_path)
 		else
 			arg[idx] = ft_strdup(file->data);
 		if (!arg[idx])
-			send_sigusr1();
+			kill(0, SIGUSR1);
 		idx++;
 		file = file->next;
 	}
@@ -178,79 +178,136 @@ void	ft_execve(t_process *proc, char **envp)
 	char	**arg;
 
 	cmd = proc->files->data;
-	cmd_path = find_path(cmd, envp);
+	if (access(cmd, F_OK | X_OK) == 0)
+		cmd_path = cmd;
+	else
+		cmd_path = find_path(cmd, envp);
 	if (!cmd_path)
-		send_sigusr2();
+		kill(0, SIGUSR2);
 	arg = mk_arg(proc, cmd_path);
 	execve(cmd_path, arg, envp); // arg[0]과 cmd_path가 같지 않아도 되는지? 만약 같아야 된다면 mk_arg 변경 필요
+}
+
+// redirec을 수행해줌
+void	ft_redirect(t_redir *redir)
+{
+	int		fd;
+
+	while (redir)
+	{
+		if (redir->type == 1 || redir->type == 3) // > , >>
+		{
+			if (redir->type == 1)
+				fd = open(redir->data, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			else
+				fd = open(redir->data, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			if (fd == -1)
+				kill(0, SIGUSR2);
+			dup2(fd, 1);
+		}
+		else if (redir->type == 2) // <
+		{
+			fd = open(redir->data, O_RDONLY);
+			if (fd == -1)
+				kill(0, SIGUSR2);
+			dup2(fd, 0);
+		}
+		close(fd);
+		redir = redir->next;
+	}
+}
+
+// 명령어가 1개 일때,
+void	execute_single(t_process *proc, char ***envp)
+{
+	int			dup_fd[2];
+	pid_t		pid;
+
+	dup_fd[0] = dup(0);
+	dup_fd[1] = dup(1);
+	ft_redirect(proc->redirs);
+	if (ck_is_builtin(proc))
+		exc_builtin(proc, envp);
+	else
+	{
+		pid = fork();
+		if (pid == -1)
+			handle_error(2);
+		else if (pid == 0)
+			ft_execve(proc, *envp);
+		else
+			wait(NULL);
+	}
+	dup2(dup_fd[0], 0);
+	dup2(dup_fd[1], 1);
+}
+
+// 자식 프로세스의 일
+void	execute_child(t_process *proc, int (*pipe_fd)[2], int *rem_fd, char ***envp)
+{
+	if (proc->next)
+		dup2((*pipe_fd)[1], 1);
+	close((*pipe_fd)[1]);
+	if (*rem_fd != -1)
+	{
+		dup2(*rem_fd, 0);
+		close(*rem_fd);
+	}
+	close((*pipe_fd)[0]);
+	ft_redirect(proc->redirs);
+	if (ck_is_builtin(proc))
+	{
+		exc_builtin(proc, envp);
+		exit(0);
+	}
+	else
+		ft_execve(proc, *envp);
+}
+
+// 명령어가 여러개 일때,
+void	execute_multiple(t_process *proc, char ***envp)
+{
+	int			pipe_fd[2];
+	int			rem_fd;
+	pid_t		pid;
+
+	rem_fd = -1;
+	while (proc)
+	{
+		pipe(pipe_fd); // 오류 처리 해줘야 할 듯
+		pid = fork();
+		if (pid == -1)
+			handle_error(2);
+		else if (pid == 0)
+			execute_child(proc, &pipe_fd, &rem_fd, envp);
+		else
+		{
+			close(pipe_fd[1]);
+			if (rem_fd != -1)
+				close(rem_fd);
+			if (proc->next)
+				rem_fd = pipe_fd[0];
+			else
+				close(pipe_fd[0]);
+		}
+		proc = proc->next;
+	}
 }
 
 void	execute(t_envi	*envi, char ***envp)
 {
 	t_process	*proc;
 	int			proc_num;
-	int			pipe_fd[2];
-	int			rem_fd;
-	pid_t		pid;
+	int			idx;
 
 	proc = envi->procs;
 	proc_num = proc_len(proc);
 	if (proc_num == 1)
-	{
-		if (ck_is_builtin(proc))
-			exc_builtin(proc, envp);
-		else
-		{
-			pid = fork();
-			if (pid == -1)
-				handle_error(2);
-			else if (pid == 0)
-				ft_execve(proc, *envp);
-			else
-				waitpid(pid, 0, NULL); // 그냥 쓴거
-		}
-	}
+		execute_single(proc, envp);
 	else
 	{
-		rem_fd = -1;
-		while (proc)
-		{
-			pipe(pipe_fd);
-			pid = fork();
-			if (pid == -1)
-				handle_error(2);
-			else if (pid == 0)
-			{
-				if (proc->next)
-					dup2(pipe_fd[1], 1);
-				close(pipe_fd[1]);
-				if (rem_fd != -1)
-				{
-					dup2(rem_fd, 0);
-					close(rem_fd);
-				}
-				close(pipe_fd[0]);
-				if (ck_is_builtin(proc))
-				{
-					exc_builtin(proc, envp);
-					exit(0);
-				}
-				else
-					ft_execve(proc, *envp);
-			}
-			else
-			{
-				close(pipe_fd[1]);
-				if (rem_fd != -1)
-					close(rem_fd);
-				if (proc->next)
-					rem_fd = pipe_fd[0];
-				else
-					close(pipe_fd[0]);
-			}
-			proc = proc->next;
-		}
-		int	idx = 0;
+		execute_multiple(proc, envp);
+		idx = 0;
 		while (idx++ < proc_num)
 			wait(NULL);
 	}

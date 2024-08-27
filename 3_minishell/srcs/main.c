@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:32:58 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/26 21:26:04 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/08/27 18:57:20 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ void	setting(t_envi *envi)
 }
 
 // 프로세스 구조체 테스트 출력용 함수입니다.
-void print_processes(t_process *proc) {
+void print_processes(t_process *proc)
+{
     int idx = 0;
     while (proc != NULL && (proc->files != NULL || proc->redirs != NULL)) {
         printf("%d번째 프로세스\n", idx);
