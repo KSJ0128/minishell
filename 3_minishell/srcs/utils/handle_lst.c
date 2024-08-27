@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:22:28 by seungbel          #+#    #+#             */
-/*   Updated: 2024/08/24 21:52:56 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/08/27 20:45:33 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,6 @@ int	ft_lstlen(char **lst)
 	while (lst[len])
 		len++;
 	return (len);
-}
-
-// char **lst를 완전히 free해주는 함수
-void	free_lst(char **lst)
-{
-	int	idx;
-
-	idx = 0;
-	while (lst[idx])
-		free(lst[idx++]);
-	free(lst);
 }
 
 // file 길이 구해줌
@@ -63,4 +52,15 @@ int	proc_len(t_process *proc)
 		proc = proc->next;
 	}
 	return (len);
+}
+
+// char **lst를 완전히 free해주는 함수
+void	free_lst(char **lst)
+{
+	int	idx;
+
+	idx = 0;
+	while (lst[idx])
+		free(lst[idx++]);
+	free(lst);
 }

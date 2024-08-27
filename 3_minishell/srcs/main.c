@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:32:58 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/27 18:57:20 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/08/27 21:48:16 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,8 @@ int	main(int argc, char **argv, char **envp)
 		if (!envi)
 			handle_error(-1);
 		parsing(envp_cp, envi, line);
-		// print_processes(envi->procs);
-		// printf("출력:\n");
+		print_processes(envi->procs);
+		printf("출력:\n");
 		execute(envi, &envp_cp);
 		free_envi(envi);
 	}
