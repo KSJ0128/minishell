@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:47:22 by seungbel          #+#    #+#             */
-/*   Updated: 2024/08/26 22:12:44 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/08/27 14:13:33 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,7 +231,10 @@ void	execute(t_envi	*envi, char ***envp)
 				}
 				close(pipe_fd[0]);
 				if (ck_is_builtin(proc))
+				{
 					exc_builtin(proc, envp);
+					exit(0);
+				}
 				else
 					ft_execve(proc, *envp);
 			}
@@ -247,6 +250,8 @@ void	execute(t_envi	*envi, char ***envp)
 			}
 			proc = proc->next;
 		}
-		waitpid(pid, 0, NULL); // 그냥 쓴거
+		int	idx = 0;
+		while (idx++ < proc_num)
+			wait(NULL);
 	}
 }
