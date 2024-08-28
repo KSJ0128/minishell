@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:33:42 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/27 18:14:25 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/08/28 15:33:28 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@
 # define REDIR_H 4 // <<
 
 # define ERROR_QUOTE 0
+
+# define BUFFER_SIZE 5 // get_next_line
 
 # include <stdio.h>
 # include "libft.h"
@@ -124,10 +126,17 @@ void	setting_etc(t_envi *envi);
 void	setting(t_envi *envi);
 
 /*****************************************************/
-// excute.c
+/* execute */
+// execute.c
 void	execute(t_envi	*envi, char ***envp);
 
-// /builtin : 오류 처리를 어떻게 해야할 지 모르겠음
+// path.c
+void	ft_execve(t_process *proc, char **envp);
+
+// redirect.c
+void	ft_redirect(t_redir *redir);
+
+/* builtin */ // 오류 처리를 어떻게 해야할 지 모르겠음
 int		ft_echo(t_file *file);
 int		ft_pwd(void);
 void	ft_cd(t_file *file);
@@ -135,6 +144,11 @@ void	ft_export(t_file *file, char ***envp);
 void	ft_env(char **envp);
 void	ft_unset(char ***envp, t_file *file);
 void	ft_exit(t_file *file);
+
+// builtin.c
+int		ck_is_builtin(t_process *proc);
+void	exec_builtin(t_process *proc, char ***envp);
+
 // ft_export.c
 int		find_str(char *en, char *str);
 
@@ -148,4 +162,12 @@ char	**mk_arg(t_process *proc, char *cmd_path);
 // handle_signal.c
 void	handle_sigusr1(int sig);
 void	handle_sigusr2(int sig);
+
+/* get_next_line */
+// get_next_line.c
+char	*get_next_line(int fd);
+
+// get_next_line_utils.c
+int		ft_strchr_num(const char *s, int c, int *bk_idx);
+
 #endif
