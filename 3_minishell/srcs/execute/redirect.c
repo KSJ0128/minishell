@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:52:18 by seungbel          #+#    #+#             */
-/*   Updated: 2024/08/29 13:27:28 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/08/29 13:30:59 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	here_doc(char *del, t_file *file) // 임시 파일 만들고, 지워줘야 
 	push_file_in_heredoc(file);
 }
 
-void	except_heredoc(t_redir *redir, t_file *file)
+void	except_heredoc(t_redir *redir)
 {
 	int		fd;
 
@@ -82,8 +82,8 @@ void	ft_redirect(t_redir *redir, t_file *file)
 {
 	while (redir)
 	{
-		except_heredoc(redir, file);
-		if (redir->type == 3)
+		except_heredoc(redir);
+		if (redir->type == 4)
 			here_doc(redir->data, file);
 		redir = redir->next;
 	}
