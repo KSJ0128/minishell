@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:46:57 by seungbel          #+#    #+#             */
-/*   Updated: 2024/08/27 20:47:45 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/08/29 13:13:48 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,11 @@ char	*mk_cmdpath(char *cmd, char *path)
 		return (0);
 	}
 }
+
 // PATH 경로 중에서 유효한 cmd경로가 있는 경우에만 반환
 char	*find_path(char *cmd, char **envp)
 {
-	char 	*path;
+	char	*path;
 	char	**pathlst;
 	char	*cmd_path;
 	int		idx;

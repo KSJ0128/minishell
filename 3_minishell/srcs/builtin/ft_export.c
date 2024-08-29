@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 11:37:11 by seungbel          #+#    #+#             */
-/*   Updated: 2024/08/22 16:46:49 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/08/29 12:21:21 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ int	find_str(char *en, char *str)
 	else
 		return (0);
 }
+
 // 이미 등록된 게 존재하면 덧붙이고 return 1, 없으면 그냥 return 0
 int	join_envp(char ***envp, char *str)
 {
@@ -92,22 +93,18 @@ int	join_envp(char ***envp, char *str)
 	idx = 0;
 	while (idx < len)
 	{
-		if (find_str((*envp)[idx], strlst[0]))
+		if (find_str((*envp)[idx], strlst[0]) && strlst[1])
 		{
-			if (strlst[1])
-			{
-				free((*envp)[idx]);
-				(*envp)[idx] = ft_strdup(str);
-				if (!(*envp)[idx])
-					handle_error(-1);
-			}
-			free_lst(strlst);
-			return (1);
+			free((*envp)[idx]);
+			(*envp)[idx] = ft_strdup(str);
+			if (!(*envp)[idx])
+				handle_error(-1);
+			break ;
 		}
 		idx++;
 	}
 	free_lst(strlst);
-	return (0);
+	return (idx < len);
 }
 
 void	ft_export(t_file *file, char ***envp)
@@ -135,5 +132,4 @@ void	ft_export(t_file *file, char ***envp)
 		free_lst(*envp);
 		*envp = new_envp;
 	}
-	
 }

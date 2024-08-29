@@ -6,14 +6,14 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:49:14 by seungbel          #+#    #+#             */
-/*   Updated: 2024/08/27 20:58:18 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/08/29 12:01:31 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // builtin 명령어인지 체크
-int ck_is_builtin(t_process *proc)
+int	ck_is_builtin(t_process *proc)
 {
 	char	*cmd;
 
@@ -37,7 +37,7 @@ int ck_is_builtin(t_process *proc)
 }
 
 // bulitin 명령어 실행
-void exec_builtin(t_process *proc, char ***envp)
+void	exec_builtin(t_process *proc, char ***envp)
 {
 	char	*cmd;
 	t_file	*file;
