@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:33:42 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/28 15:33:28 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/08/29 11:15:55 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void	execute(t_envi	*envi, char ***envp);
 void	ft_execve(t_process *proc, char **envp);
 
 // redirect.c
-void	ft_redirect(t_redir *redir);
+void	ft_redirect(t_redir *redir, t_file *file);
 
 /* builtin */ // 오류 처리를 어떻게 해야할 지 모르겠음
 int		ft_echo(t_file *file);

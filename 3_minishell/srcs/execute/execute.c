@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:47:22 by seungbel          #+#    #+#             */
-/*   Updated: 2024/08/27 20:56:02 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/08/29 11:30:56 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	execute_single(t_process *proc, char ***envp)
 
 	dup_fd[0] = dup(0);
 	dup_fd[1] = dup(1);
-	ft_redirect(proc->redirs);
+	ft_redirect(proc->redirs, proc->files);
 	if (ck_is_builtin(proc))
 		exec_builtin(proc, envp);
 	else
@@ -49,7 +49,7 @@ void	execute_child(t_process *proc, int (*pipe_fd)[2], int *rem_fd, char ***envp
 		close(*rem_fd);
 	}
 	close((*pipe_fd)[0]);
-	ft_redirect(proc->redirs);
+	ft_redirect(proc->redirs, proc->files);
 	if (ck_is_builtin(proc))
 	{
 		exec_builtin(proc, envp);
@@ -106,4 +106,6 @@ void	execute(t_envi	*envi, char ***envp)
 		while (idx++ < proc_num)
 			wait(NULL);
 	}
+	if (access(".heredoctmp", F_OK) == 0)
+		unlink(".heredoctmp");
 }
