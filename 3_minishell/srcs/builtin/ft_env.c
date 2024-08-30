@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:49:51 by seungbel          #+#    #+#             */
-/*   Updated: 2024/08/29 12:01:55 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/08/30 13:51:19 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	ft_env(char **envp)
 	while (idx < len)
 	{
 		tmp = ft_split(envp[idx], '=');
-		if (tmp[1])
+		if (tmp[1] && ft_strncmp(envp[idx], "?=", 2))
 			printf("%s\n", envp[idx]);
 		free_lst(tmp);
 		idx++;

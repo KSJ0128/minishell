@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:32:58 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/27 21:48:16 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/08/30 11:45:49 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ char	**copy_envp(char **envp)
 	if (!envp)
 		return (0);
 	len = ft_lstlen(envp);
-	cp_envp = (char **)malloc(sizeof(char *) * (len + 1));
+	cp_envp = (char **)malloc(sizeof(char *) * (len + 2));
 	if (!cp_envp)
 		handle_error(-1);
 	idx = 0;
@@ -89,7 +89,10 @@ char	**copy_envp(char **envp)
 			handle_error(-1);
 		idx++;
 	}
-	cp_envp[idx] = 0;
+	cp_envp[idx] = ft_strdup("?=0");
+	if (!cp_envp[idx])
+		handle_error(-1);
+	cp_envp[++idx] = 0;
 	return (cp_envp);
 }
 
