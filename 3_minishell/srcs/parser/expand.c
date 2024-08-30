@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 11:36:17 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/24 15:35:36 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/08/30 14:10:00 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,6 @@ int	is_special_var(char c)
 	if (c == '$') // 현재 프로세스의 pid
 		return (TRUE);
 	else if (c == '0') // 현재 실행 중인 스크립트의 이름을 반환
-		return (TRUE);
-	else if (c == '?') // 마지막으로 실행된 명령의 종료 상태 (Exit status)를 반환(필수), 0이면 성공
 		return (TRUE);
 	else if (c == '!') // 마지막으로 실행된 백그라운드 작업의 프로세스 ID를 반환
 		return (TRUE);
