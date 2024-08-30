@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 11:37:11 by seungbel          #+#    #+#             */
-/*   Updated: 2024/08/29 12:21:21 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/08/30 12:43:48 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,16 +114,19 @@ void	ft_export(t_file *file, char ***envp)
 	int		idx;
 
 	idx = 0;
-	str = 0;
 	if (!file)
 	{
 		while ((*envp)[idx])
-			print_envp((*envp)[idx++]);
+		{
+			if (ft_strncmp((*envp)[idx], "?=", 2) != 0)
+				print_envp((*envp)[idx]);
+			idx++;
+		}
 		return ;
 	}
 	str = file->data;
-	if (*str == '=')
-		printf("\'%s\' : not a valid identifier\n", str);
+	if (*str == '=' || ft_strncmp(str, "?=", 2) == 0)
+		perror("not a valid identifier");
 	else
 	{
 		if (join_envp(envp, str))

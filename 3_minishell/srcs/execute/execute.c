@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:47:22 by seungbel          #+#    #+#             */
-/*   Updated: 2024/08/29 11:30:56 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/08/30 11:23:43 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	execute_single(t_process *proc, char ***envp)
 	{
 		pid = fork();
 		if (pid == -1)
-			handle_error(2);
+			handle_error(0);
 		else if (pid == 0)
 			ft_execve(proc, *envp);
 		else
@@ -72,7 +72,7 @@ void	execute_multiple(t_process *proc, char ***envp)
 		pipe(pipe_fd); // 오류 처리 해줘야 할 듯
 		pid = fork();
 		if (pid == -1)
-			handle_error(2);
+			handle_error(0);
 		else if (pid == 0)
 			execute_child(proc, &pipe_fd, &rem_fd, envp);
 		else
