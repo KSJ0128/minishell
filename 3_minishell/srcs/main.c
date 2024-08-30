@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:32:58 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/24 15:39:50 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/08/27 21:48:16 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ void	setting(t_envi *envi)
 }
 
 // 프로세스 구조체 테스트 출력용 함수입니다.
-void print_processes(t_process *proc) {
+void print_processes(t_process *proc)
+{
     int idx = 0;
     while (proc != NULL && (proc->files != NULL || proc->redirs != NULL)) {
         printf("%d번째 프로세스\n", idx);
@@ -67,14 +68,43 @@ void print_processes(t_process *proc) {
 		printf("프로세스가 존재하지 않습니다.\n");
 }
 
+// envp변경을 위해서, envp 복사
+char	**copy_envp(char **envp)
+{
+	int		len;
+	int		idx;
+	char	**cp_envp;
+
+	if (!envp)
+		return (0);
+	len = ft_lstlen(envp);
+	cp_envp = (char **)malloc(sizeof(char *) * (len + 1));
+	if (!cp_envp)
+		handle_error(-1);
+	idx = 0;
+	while (idx < len)
+	{
+		cp_envp[idx] = ft_strdup(envp[idx]);
+		if (!cp_envp[idx])
+			handle_error(-1);
+		idx++;
+	}
+	cp_envp[idx] = 0;
+	return (cp_envp);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
+	char		**envp_cp;
 	t_envi		*envi;
 
 	(void)argv;
 	if (argc != 1)
 		handle_error(0);
+	signal(SIGUSR1, handle_sigusr1);
+	signal(SIGUSR2, handle_sigusr2);
+	envp_cp = copy_envp(envp);
 	while (1)
 	{
 		line = readline("\033[34mminishell$>\033[0m ");
@@ -84,8 +114,10 @@ int	main(int argc, char **argv, char **envp)
 		envi = (t_envi *)malloc(sizeof(t_envi));
 		if (!envi)
 			handle_error(-1);
-		parsing(envp, envi, line);
+		parsing(envp_cp, envi, line);
 		print_processes(envi->procs);
+		printf("출력:\n");
+		execute(envi, &envp_cp);
 		free_envi(envi);
 	}
 	return (0);

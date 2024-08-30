@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:33:42 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/18 21:55:31 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/08/29 11:15:55 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,20 @@
 
 # define ERROR_QUOTE 0
 
-#include <stdio.h>
-#include "libft.h"
+# define BUFFER_SIZE 5 // get_next_line
+
+# include <stdio.h>
+# include "libft.h"
+# include <signal.h> // signal, kill 사용을 웨해 추가
+# include <fcntl.h> // open 함수 사용을 위해 추가
 
 //노트북
-#include "readline/readline.h"
-#include "readline/history.h"
+// #include "readline/readline.h"
+// #include "readline/history.h"
 
 //클러스터
-// #include "readline.h"
-// #include "history.h"
+# include "readline.h"
+# include "history.h"
 
 // 프로세스 구조체에 담기 전 토큰 리스트
 typedef struct token
@@ -120,5 +124,50 @@ void	make_process(t_envi *envi);
 // main.c
 void	setting_etc(t_envi *envi);
 void	setting(t_envi *envi);
+
+/*****************************************************/
+/* execute */
+// execute.c
+void	execute(t_envi	*envi, char ***envp);
+
+// path.c
+void	ft_execve(t_process *proc, char **envp);
+
+// redirect.c
+void	ft_redirect(t_redir *redir, t_file *file);
+
+/* builtin */ // 오류 처리를 어떻게 해야할 지 모르겠음
+int		ft_echo(t_file *file);
+int		ft_pwd(void);
+void	ft_cd(t_file *file);
+void	ft_export(t_file *file, char ***envp);
+void	ft_env(char **envp);
+void	ft_unset(char ***envp, t_file *file);
+void	ft_exit(t_file *file);
+
+// builtin.c
+int		ck_is_builtin(t_process *proc);
+void	exec_builtin(t_process *proc, char ***envp);
+
+// ft_export.c
+int		find_str(char *en, char *str);
+
+// handle_lst.c
+int		ft_lstlen(char **lst);
+void	free_lst(char **lst);
+int		proc_len(t_process *proc);
+int		ft_filelen(t_file *file);
+char	**mk_arg(t_process *proc, char *cmd_path);
+
+// handle_signal.c
+void	handle_sigusr1(int sig);
+void	handle_sigusr2(int sig);
+
+/* get_next_line */
+// get_next_line.c
+char	*get_next_line(int fd);
+
+// get_next_line_utils.c
+int		ft_strchr_num(const char *s, int c, int *bk_idx);
 
 #endif

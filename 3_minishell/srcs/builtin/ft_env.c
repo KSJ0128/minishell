@@ -1,26 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_handler.c                                    :+:      :+:    :+:   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/13 15:18:59 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/26 14:53:45 by seungbel         ###   ########.fr       */
+/*   Created: 2024/08/22 13:49:51 by seungbel          #+#    #+#             */
+/*   Updated: 2024/08/29 12:01:55 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_error(int num)
+// 뒤에 명령어는 그냥 무시하도록 구현했는데, 그렇게 해도 될런지
+void	ft_env(char **envp)
 {
-	if (num == -1)
-		printf("Error : Malloc Error.\n");
-	else if (num == 0)
-		printf("Error : Invalid arguments.\n");
-	else if (num == 1)
-		printf("Error : Invalid quotes.\n");
-	else if (num == 2)
-		printf("Error : Fork error.\n");
-	exit(0);
+	int		idx;
+	int		len;
+	char	**tmp;
+
+	len = ft_lstlen(envp);
+	idx = 0;
+	while (idx < len)
+	{
+		tmp = ft_split(envp[idx], '=');
+		if (tmp[1])
+			printf("%s\n", envp[idx]);
+		free_lst(tmp);
+		idx++;
+	}
 }
