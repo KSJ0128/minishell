@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:33:42 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/30 14:10:24 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/02 06:32:33 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@
 # include <fcntl.h> // open 함수 사용을 위해 추가
 
 //노트북
-#include "readline/readline.h"
-#include "readline/history.h"
+// #include "readline/readline.h"
+// #include "readline/history.h"
 
 //클러스터
-// # include "readline.h"
-// # include "history.h"
+# include "readline.h"
+# include "history.h"
 
 // 프로세스 구조체에 담기 전 토큰 리스트
 typedef struct token
@@ -109,9 +109,10 @@ void	remove_quote(t_envi *envi);
 void	parsing(char **envp, t_envi *envi, char *str);
 
 // expand.c
-void	set_out_quote(char quote, t_envi *envi);
 void	change_var(t_token *token, char *var, int d_idx, int s_idx);
 void	can_change_var(char **envp, t_token *token, char *str, int d_idx);
+int		is_special_var(t_token *now, int idx, char c);
+void	set_out_quote(char quote, t_envi *envi);
 void	expand_var(char **envp, t_envi *envi);
 
 // process.c
