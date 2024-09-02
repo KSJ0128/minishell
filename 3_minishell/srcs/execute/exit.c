@@ -1,25 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/16 15:29:31 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/02 18:05:01 by seungbel         ###   ########.fr       */
+/*   Created: 2024/09/02 17:43:31 by seungbel          #+#    #+#             */
+/*   Updated: 2024/09/02 19:30:40 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_pwd(void)
+int	get_exitcode(pid_t last, int proc_num)
 {
-	char	*path;
+	int	stat;
+	int	exitcode;
 
-	path = getcwd(NULL, 0);
-	if (!path)
-		return (1);
-	printf("%s\n", path);
-	free(path);
-	return (0);
+	while (proc_num > 0)
+	{
+		if (last == wait(&stat))
+		{
+			if (WIFEXITED(stat))
+				exitcode = WEXITSTATUS(stat);
+			else
+				exitcode = 128; // 여기에 signal을 더해줘야 함
+		}
+		proc_num--;
+	}
+	return (exitcode);
 }

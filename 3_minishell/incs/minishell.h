@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:33:42 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/29 11:15:55 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/02 19:30:30 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ typedef struct envi
 
 // error.c
 void	handle_error(int num);
+void	perror_exit(char *str, int code);
 
 // free.c
 void	change_data(t_token *token, char *str);
@@ -139,15 +140,16 @@ void	ft_redirect(t_redir *redir, t_file *file);
 /* builtin */ // 오류 처리를 어떻게 해야할 지 모르겠음
 int		ft_echo(t_file *file);
 int		ft_pwd(void);
-void	ft_cd(t_file *file);
-void	ft_export(t_file *file, char ***envp);
-void	ft_env(char **envp);
-void	ft_unset(char ***envp, t_file *file);
-void	ft_exit(t_file *file);
+int		ft_cd(t_file *file);
+int		ft_export(t_file *file, char ***envp);
+int		ft_env(char **envp);
+int		ft_unset(char ***envp, t_file *file);
+void	ft_exit(t_file *file); // 진짜 끝내는 거니까 상관없지 않나?
 
 // builtin.c
 int		ck_is_builtin(t_process *proc);
-void	exec_builtin(t_process *proc, char ***envp);
+int		exec_builtin(t_process *proc, char ***envp);
+int		ck_export_valid(char *name);
 
 // ft_export.c
 int		find_str(char *en, char *str);
@@ -170,4 +172,6 @@ char	*get_next_line(int fd);
 // get_next_line_utils.c
 int		ft_strchr_num(const char *s, int c, int *bk_idx);
 
+// exit.c
+int		get_exitcode(pid_t last, int proc_num); // signal 추가 해주기
 #endif

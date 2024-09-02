@@ -6,11 +6,17 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 15:18:59 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/30 13:44:51 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/02 18:28:12 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	perror_exit(char *str, int code)
+{
+	perror(str);
+	exit(code);
+}
 
 void	handle_error(int num)
 {

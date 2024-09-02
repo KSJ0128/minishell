@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:49:14 by seungbel          #+#    #+#             */
-/*   Updated: 2024/08/29 12:01:31 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/02 19:44:37 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,27 +37,54 @@ int	ck_is_builtin(t_process *proc)
 }
 
 // bulitin 명령어 실행
-void	exec_builtin(t_process *proc, char ***envp)
+int	exec_builtin(t_process *proc, char ***envp)
 {
 	char	*cmd;
 	t_file	*file;
+	int		stat;
 
 	cmd = proc->files->data;
 	file = proc->files->next;
+	stat = 0;
 	if (ft_strncmp("echo", cmd, 5) == 0)
-		ft_echo(file);
+		stat = ft_echo(file);
 	else if (ft_strncmp("pwd", cmd, 4) == 0)
-		ft_pwd();
+		stat = ft_pwd();
 	else if (ft_strncmp("cd", cmd, 3) == 0)
-		ft_cd(file);
+		stat = ft_cd(file);
 	else if (ft_strncmp("export", cmd, 7) == 0)
-		ft_export(file, envp);
+		stat = ft_export(file, envp);
 	else if (ft_strncmp("env", cmd, 4) == 0)
-		ft_env(*envp);
+		stat = ft_env(*envp);
 	else if (ft_strncmp("unset", cmd, 6) == 0)
-		ft_unset(envp, file);
+		stat = ft_unset(envp, file);
 	else if (ft_strncmp("exit", cmd, 5) == 0)
 		ft_exit(file);
 	else
-		return ;
+		return (stat);
+	return (stat);
+}
+
+// export 함수의 validation 체크 부분
+int	ck_export_valid(char *name)
+{
+	int	idx;
+
+	idx = 0;
+	if (name[idx] >= '0' && name[idx] <= '9')
+		return (0);
+	while (name[idx] != '=' && name[idx])
+	{
+		if (name[idx] >= 'a' && name[idx] <= 'z')
+			idx++;
+		else if (name[idx] >= 'A' && name[idx] <= 'Z')
+			idx++;
+		else if (name[idx] >= '0' && name[idx] <= '9')
+			idx++;
+		else if (name[idx] == '_')
+			idx++;
+		else
+			return (0);
+	}
+	return (1);
 }
