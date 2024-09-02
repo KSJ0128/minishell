@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:32:58 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/30 11:45:49 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/02 21:28:26 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,30 +40,35 @@ void	setting(t_envi *envi)
 // 프로세스 구조체 테스트 출력용 함수입니다.
 void print_processes(t_process *proc)
 {
-    int idx = 0;
-    while (proc != NULL && (proc->files != NULL || proc->redirs != NULL)) {
-        printf("%d번째 프로세스\n", idx);
+	int idx;
+
+	idx = 0;
+    while (proc != NULL && (proc->files != NULL || proc->redirs != NULL))
+	{
+		printf("%d번째 프로세스\n", idx);
 
         // 파일 리스트 출력
-        t_file *file = proc->files;
-        printf("파일:\n");
-        while (file != NULL) {
-            printf("  %s\n", file->data);
-            file = file->next;
-        }
+		t_file *file = proc->files;
+		printf("파일:\n");
+		while (file != NULL)
+		{
+			printf("  %s\n", file->data);
+			file = file->next;
+		}
 
         // 리다이렉션 리스트 출력
-        t_redir *redir = proc->redirs;
-        printf("리다이렉션:\n");
-        while (redir != NULL) {
+		t_redir *redir = proc->redirs;
+		printf("리다이렉션:\n");
+		while (redir != NULL)
+		{
             printf("  타입: %d, 데이터: %s\n", redir->type, redir->data);
             redir = redir->next;
-        }
+		}
 
         // 다음 프로세스로 이동
-        proc = proc->next;
-        idx++;
-    }
+		proc = proc->next;
+		idx++;
+	}
 	if (idx == 0)
 		printf("프로세스가 존재하지 않습니다.\n");
 }
@@ -105,14 +110,12 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	if (argc != 1)
 		handle_error(0);
-	signal(SIGUSR1, handle_sigusr1);
-	signal(SIGUSR2, handle_sigusr2);
 	envp_cp = copy_envp(envp);
 	while (1)
 	{
 		line = readline("\033[34mminishell$>\033[0m ");
 		if (!line)
-			continue;
+			continue ;
 		add_history(line);
 		envi = (t_envi *)malloc(sizeof(t_envi));
 		if (!envi)

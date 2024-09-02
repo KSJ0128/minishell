@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:46:57 by seungbel          #+#    #+#             */
-/*   Updated: 2024/08/30 11:19:27 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/02 21:33:20 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ char	**mk_arg(t_process *proc, char *cmd_path)
 	file_len = ft_filelen(file);
 	arg = (char **)malloc(sizeof(char *) * (file_len + 1));
 	if (!arg)
-		kill(0, SIGUSR1);
+		return (0);
 	idx = 0;
 	while (file)
 	{
@@ -115,7 +115,7 @@ char	**mk_arg(t_process *proc, char *cmd_path)
 		else
 			arg[idx] = ft_strdup(file->data);
 		if (!arg[idx])
-			kill(0, SIGUSR1);
+			return (0);
 		idx++;
 		file = file->next;
 	}
@@ -136,7 +136,7 @@ void	ft_execve(t_process *proc, char **envp)
 	else
 		cmd_path = find_path(cmd, envp);
 	if (!cmd_path)
-		kill(0, SIGUSR2); // 시그널로 하는 거 아님
+		exit (127); // 시그널로 하는 거 아님
 	arg = mk_arg(proc, cmd_path);
 	execve(cmd_path, arg, envp); // arg[0]과 cmd_path가 같지 않아도 되는지? 만약 같아야 된다면 mk_arg 변경 필요
 }

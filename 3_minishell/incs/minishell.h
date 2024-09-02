@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:33:42 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/02 19:30:30 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/02 20:51:03 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,10 @@ void	remove_quote(t_envi *envi);
 void	parsing(char **envp, t_envi *envi, char *str);
 
 // expand.c
-void	set_out_quote(char quote, t_envi *envi);
 void	change_var(t_token *token, char *var, int d_idx, int s_idx);
 void	can_change_var(char **envp, t_token *token, char *str, int d_idx);
+int		is_special_var(t_token *now, int idx, char c);
+void	set_out_quote(char quote, t_envi *envi);
 void	expand_var(char **envp, t_envi *envi);
 
 // process.c
@@ -153,6 +154,7 @@ int		ck_export_valid(char *name);
 
 // ft_export.c
 int		find_str(char *en, char *str);
+int		join_envp(char ***envp, char *str);
 
 // handle_lst.c
 int		ft_lstlen(char **lst);
@@ -174,4 +176,5 @@ int		ft_strchr_num(const char *s, int c, int *bk_idx);
 
 // exit.c
 int		get_exitcode(pid_t last, int proc_num); // signal 추가 해주기
+void	record_exitcode(int code, char ***envp);
 #endif

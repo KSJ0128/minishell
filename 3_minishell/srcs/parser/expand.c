@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 11:36:17 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/24 15:35:36 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/02 06:29:03 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,14 @@ void	can_change_var(char **envp, t_token *token, char *str, int d_idx)
 }
 
 // $ 관련 특수문자 체크, 아직 따로 처리 로직은 작성 안했습니다
-int	is_special_var(char c)
+int	is_special_var(t_token *now, int idx, char c)
 {
 	if (c == '$') // 현재 프로세스의 pid
+	{
+		change_var(now, ft_itoa(getpid()), idx, idx + 2);
 		return (TRUE);
+	}
 	else if (c == '0') // 현재 실행 중인 스크립트의 이름을 반환
-		return (TRUE);
-	else if (c == '?') // 마지막으로 실행된 명령의 종료 상태 (Exit status)를 반환(필수), 0이면 성공
 		return (TRUE);
 	else if (c == '!') // 마지막으로 실행된 백그라운드 작업의 프로세스 ID를 반환
 		return (TRUE);
@@ -109,7 +110,7 @@ void	expand_var(char **envp, t_envi *envi)
 				set_out_quote(now->data[idx], envi);
 			else if (now->data[idx] == '$' && envi->out_quote != '\'') // $ 만나고, 외부 따옴표가 '가 아닌 경우
 			{
-				if (!is_special_var(now->data[idx + 1])) // $ 뒤에 의미 가지는 특별한 문자 오는 경우
+				if (!is_special_var(now, idx, now->data[idx + 1])) // $ 뒤에 의미 가지는 특별한 문자 오는 경우
 					can_change_var(envp, now, now->data + idx + 1, idx);
 			}
 			idx++;
