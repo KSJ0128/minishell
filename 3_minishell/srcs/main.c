@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:32:58 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/02 21:28:26 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/03 21:16:29 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,10 @@ void	setting(t_envi *envi)
 	envi->procs->files = NULL;
 	envi->procs->redirs = NULL;
 	envi->procs->next = NULL;
+	envi->term = (t_termios *)malloc(sizeof(t_termios));
+	if (!(envi->term))
+		exit(-1);
+	set_termios(envi->term);
 	setting_etc(envi);
 }
 
@@ -111,6 +115,7 @@ int	main(int argc, char **argv, char **envp)
 	if (argc != 1)
 		handle_error(0);
 	envp_cp = copy_envp(envp);
+	signal(SIGINT, handle_sigint);
 	while (1)
 	{
 		line = readline("\033[34mminishell$>\033[0m ");
