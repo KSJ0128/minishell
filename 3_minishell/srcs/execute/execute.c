@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:47:22 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/03 21:29:28 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/03 22:29:04 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ int	execute_multiple(t_process *proc, char ***envp, int proc_num)
 
 	rem_fd = -1;
 	stat = 0;
+	signal(SIGINT, handle_signal2);
+	signal(SIGQUIT, handle_signal2);
 	while (proc)
 	{
 		if (pipe(pipe_fd) != 0)
