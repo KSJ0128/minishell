@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:47:22 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/02 21:33:07 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/03 21:29:28 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ int	execute_single(t_process *proc, char ***envp)
 		if (pid == -1)
 			handle_error(0);
 		else if (pid == 0)
+		{
+			restore_signal();
 			ft_execve(proc, *envp);
+		}
 		else
 			stat = get_exitcode(pid, 1);
 	}
@@ -77,13 +80,16 @@ int	execute_multiple(t_process *proc, char ***envp, int proc_num)
 	stat = 0;
 	while (proc)
 	{
-		if (pipe(pipe_fd) != 0 )
+		if (pipe(pipe_fd) != 0)
 			return (1);
 		pid = fork();
 		if (pid == -1)
 			handle_error(0);
 		else if (pid == 0)
+		{
+			restore_signal();
 			execute_child(proc, &pipe_fd, &rem_fd, envp);
+		}
 		else
 		{
 			close(pipe_fd[1]);

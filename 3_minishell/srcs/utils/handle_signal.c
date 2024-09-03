@@ -3,25 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   handle_signal.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 15:54:58 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/02 06:32:13 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/03 21:24:30 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_sigusr1(int sig)
+void	handle_signal(int sig)
 {
-	signal(sig, SIG_IGN);
-	printf("Error : Malloc Error.\n");
-	return ;
+	global_sig = sig;
+	if (sig == SIGINT)
+	{
+		rl_replace_line("", 0);
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	else if (sig == SIGQUIT)
+	{
+		rl_on_new_line();
+		rl_redisplay();
+	}
 }
 
-void	handle_sigusr2(int sig) // erorr msg가 두 번 발생함
+void	init_signal(void)
 {
-	signal(sig, SIG_IGN);
-	printf("Error: Son always breaks his parent's hearts\n");
-	return ;
+	signal(SIGINT, handle_signal);
+	signal(SIGQUIT, handle_signal);
+}
+
+void	restore_signal(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+}
+
+void	hello_eof(void)
+{
+	printf("\033[1A\033[12Cexit\n");
+	exit(0);
 }
