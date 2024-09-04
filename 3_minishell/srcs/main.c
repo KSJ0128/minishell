@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:32:58 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/03 21:16:29 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/04 13:16:57 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,7 @@ void	setting(t_envi *envi)
 	envi->procs->files = NULL;
 	envi->procs->redirs = NULL;
 	envi->procs->next = NULL;
-	envi->term = (t_termios *)malloc(sizeof(t_termios));
-	if (!(envi->term))
-		exit(-1);
-	set_termios(envi->term);
+	set_termios();
 	setting_etc(envi);
 }
 

@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:33:42 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/03 21:14:35 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/04 13:19:46 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,6 @@
 # include "readline.h"
 # include "history.h"
 
-typedef struct s_termios
-{
-	struct termios old_term;
-	struct termios new_term;
-}	t_termios;
-
 // 프로세스 구조체에 담기 전 토큰 리스트
 typedef struct token
 {
@@ -91,7 +85,6 @@ typedef struct envi
 	t_process	*procs; // 프로세스 구조체 리스트
 	int		quote[2]; // 토큰 분리시 따옴표 체크
 	char	out_quote; // 환경 변수 변환시 외부 따옴표가 무엇인지 체크
-	t_termios *term;
 }	t_envi;
 
 // error.c
@@ -172,7 +165,7 @@ int		ft_filelen(t_file *file);
 char	**mk_arg(t_process *proc, char *cmd_path);
 
 // handle_signal.c
-void	set_termios(t_termios *term);
+void	set_termios();
 void	handle_sigusr1(int sig);
 void	handle_sigusr2(int sig);
 void	handle_sigint();
