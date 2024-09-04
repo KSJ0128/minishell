@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:47:22 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/03 22:42:08 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/04 15:51:19 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int	execute_single(t_process *proc, char ***envp)
 			handle_error(0);
 		else if (pid == 0)
 		{
+			reset_termios();
 			restore_signal();
 			ft_execve(proc, *envp);
 		}
@@ -78,8 +79,6 @@ int	execute_multiple(t_process *proc, char ***envp, int proc_num)
 
 	rem_fd = -1;
 	stat = 0;
-	signal(SIGINT, handle_signal2);
-	signal(SIGQUIT, handle_signal2);
 	while (proc)
 	{
 		if (pipe(pipe_fd) != 0)
@@ -89,6 +88,7 @@ int	execute_multiple(t_process *proc, char ***envp, int proc_num)
 			handle_error(0);
 		else if (pid == 0)
 		{
+			reset_termios();
 			restore_signal();
 			execute_child(proc, &pipe_fd, &rem_fd, envp);
 		}

@@ -6,20 +6,29 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 15:54:58 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/03 22:42:57 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/04 15:50:08 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // ctrl+c 프롬프트 출력 방지
-void	set_termios(t_termios *term)
+void	set_termios(void)
 {
-	tcgetattr(STDIN_FILENO, &term->old_term);
-	tcgetattr(STDIN_FILENO, &term->new_term);
-	term->new_term.c_lflag &= ~ICANON;
-	term->new_term.c_lflag &= ~ECHOCTL;
-	tcsetattr(STDIN_FILENO, TCSANOW, &term->new_term);
+	struct termios	term;
+
+	tcgetattr(STDOUT_FILENO, &term);
+	term.c_lflag &= ~ECHOCTL;
+	tcsetattr(STDOUT_FILENO, TCSANOW, &term);
+}
+
+void	reset_termios(void)
+{
+	struct termios	term;
+
+	tcgetattr(STDOUT_FILENO, &term);
+	term.c_lflag |= ECHOCTL;
+	tcsetattr(STDOUT_FILENO, TCSANOW, &term);
 }
 
 void	handle_signal(int sig)
@@ -37,11 +46,6 @@ void	handle_signal(int sig)
 		rl_on_new_line();
 		rl_redisplay();
 	}
-}
-
-void	handle_signal2(int sig)
-{
-	global_sig = sig;
 }
 
 void	init_signal(void)

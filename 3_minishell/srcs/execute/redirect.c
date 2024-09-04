@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:52:18 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/02 20:56:44 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/04 15:45:02 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	push_file_in_heredoc(t_file *file)
 	file->next = new;
 }
 
-void	here_doc(char *del, t_file *file) // 임시 파일 만들고, 지워줘야 함
+void	here_doc(char *del, t_file *file)
 {
 	char	*buffer;
 	int		fd;

@@ -6,8 +6,8 @@ RM = rm -f
 DBG = -g -fsanitize=address
 
 ## 노트북
-# LFLAGS = -L./$(LIBFT_DIR) -lft -L/opt/homebrew/Cellar/readline/8.2.10/lib -lreadline
-# INCLUDES = -I./incs -I./libft/incs -I/opt/homebrew/Cellar/readline/8.2.10/include/readline
+# LFLAGS = -L./$(LIBFT_DIR) -lft -L/opt/homebrew/Cellar/readline/8.2.13/lib -lreadline
+# INCLUDES = -I./incs -I./libft/incs -I/opt/homebrew/Cellar/readline/8.2.13/include
 
 ## 클러스터
 LFLAGS = -lreadline -L./$(LIBFT_DIR) -lft
