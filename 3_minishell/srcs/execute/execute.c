@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:47:22 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/03 22:29:04 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/03 22:42:08 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,4 +124,5 @@ void	execute(t_envi	*envi, char ***envp)
 	record_exitcode(stat, envp);
 	if (access(".heredoctmp", F_OK) == 0)
 		unlink(".heredoctmp");
+	init_signal();
 }

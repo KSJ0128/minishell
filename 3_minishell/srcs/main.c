@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:32:58 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/03 22:30:32 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/03 22:41:48 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,9 +117,9 @@ int	main(int argc, char **argv, char **envp)
 	if (argc != 1)
 		handle_error(0);
 	envp_cp = copy_envp(envp);
+	init_signal();
 	while (1)
 	{
-		init_signal();
 		line = readline("\033[34mminishell$>\033[0m ");
 		if (!line)
 			hello_eof();

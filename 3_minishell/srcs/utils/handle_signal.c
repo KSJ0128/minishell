@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 15:54:58 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/03 22:27:59 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/03 22:42:57 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,11 @@ void	handle_signal(int sig)
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_redisplay();
-		return ;
 	}
 	else if (sig == SIGQUIT)
 	{
 		rl_on_new_line();
 		rl_redisplay();
-		return ;
 	}
 }
 
