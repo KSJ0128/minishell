@@ -6,30 +6,22 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:47:22 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/05 15:59:25 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/05 20:34:52 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// 명령어가 1개 일때,
 int	execute_single(t_process *proc, char ***envp)
 {
 	int			dup_fd[3];
 	int			stat;
 	pid_t		pid;
 
-	dup_fd[0] = dup(0); 
-	dup_fd[1] = dup(1);
-	dup_fd[2] = dup(2);
+	dup_all(&dup_fd);
 	stat = ft_redirect_one(proc->redirs, proc->files);
 	if (stat)
-	{
-		dup2(dup_fd[0], 0);
-		dup2(dup_fd[1], 1);
-		dup2(dup_fd[2], 2);
-		return (stat);
-	}
+		return (dup2_all(&dup_fd, stat));
 	if (ck_is_builtin(proc))
 		stat = exec_builtin(proc, envp);
 	else
@@ -39,21 +31,17 @@ int	execute_single(t_process *proc, char ***envp)
 			handle_error(0);
 		else if (pid == 0)
 		{
-			reset_termios();
-			restore_signal();
+			reset_sig_termi();
 			ft_execve(proc, *envp);
 		}
 		else
 			stat = get_exitcode(pid, 1);
 	}
-	dup2(dup_fd[0], 0);
-	dup2(dup_fd[1], 1);
-	dup2(dup_fd[2], 2);
-	return (stat);
+	return (dup2_all(&dup_fd, stat));
 }
 
-// (명령어가 여러 개 일 때,) 자식 프로세스의 일
-void	execute_child(t_process *proc, int (*pipe_fd)[2], int *rem_fd, char ***envp)
+void	execute_child(t_process *proc, int (*pipe_fd)[2],
+						int *rem_fd, char ***envp)
 {
 	int	stat;
 
@@ -79,7 +67,17 @@ void	execute_child(t_process *proc, int (*pipe_fd)[2], int *rem_fd, char ***envp
 		ft_execve(proc, *envp);
 }
 
-// 명령어가 여러 개 일 때,
+void	execute_parent(int (*pipe_fd)[2], int *rem_fd, t_process *proc)
+{
+	close((*pipe_fd)[1]);
+	if (*rem_fd != -1)
+		close(*rem_fd);
+	if (proc->next)
+		*rem_fd = (*pipe_fd)[0];
+	else
+		close((*pipe_fd)[0]);
+}
+
 int	execute_multiple(t_process *proc, char ***envp, int proc_num)
 {
 	int			pipe_fd[2];
@@ -98,20 +96,11 @@ int	execute_multiple(t_process *proc, char ***envp, int proc_num)
 			handle_error(0);
 		else if (pid == 0)
 		{
-			reset_termios();
-			restore_signal();
+			reset_sig_termi();
 			execute_child(proc, &pipe_fd, &rem_fd, envp);
 		}
 		else
-		{
-			close(pipe_fd[1]);
-			if (rem_fd != -1)
-				close(rem_fd);
-			if (proc->next)
-				rem_fd = pipe_fd[0];
-			else
-				close(pipe_fd[0]);
-		}
+			execute_parent(&pipe_fd, &rem_fd, proc);
 		proc = proc->next;
 	}
 	stat = get_exitcode(pid, proc_num);

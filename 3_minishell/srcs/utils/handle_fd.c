@@ -1,39 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_termios.c                                   :+:      :+:    :+:   */
+/*   handle_fd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/05 14:36:01 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/05 14:37:33 by seungbel         ###   ########.fr       */
+/*   Created: 2024/09/05 20:24:15 by seungbel          #+#    #+#             */
+/*   Updated: 2024/09/05 20:34:06 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// ctrl+c 프롬프트 출력 방지
-void	set_termios(void)
+void	dup_all(int (*dup_fd)[3])
 {
-	struct termios	term;
-
-	tcgetattr(STDOUT_FILENO, &term);
-	term.c_lflag &= ~ECHOCTL;
-	tcsetattr(STDOUT_FILENO, TCSANOW, &term);
+	(*dup_fd)[0] = dup(0);
+	(*dup_fd)[1] = dup(1);
+	(*dup_fd)[2] = dup(2);
 }
 
-void	reset_termios(void)
+int	dup2_all(int (*dup_fd)[3], int stat)
 {
-	struct termios	term;
-
-	tcgetattr(STDOUT_FILENO, &term);
-	term.c_lflag |= ECHOCTL;
-	term.c_lflag |= ICANON;
-	tcsetattr(STDOUT_FILENO, TCSANOW, &term);
-}
-
-void	hello_eof(void)
-{
-	printf("\033[1A\033[12Cexit\n");
-	exit(0);
+	dup2((*dup_fd)[0], 0);
+	dup2((*dup_fd)[1], 1);
+	dup2((*dup_fd)[2], 2);
+	close((*dup_fd)[0]);
+	close((*dup_fd)[1]);
+	close((*dup_fd)[2]);
+	return (stat);
 }
