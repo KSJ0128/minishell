@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:52:18 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/04 18:15:52 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/05 17:29:24 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,22 @@
 void	push_file_in_heredoc(t_file *file)
 {
 	t_file	*new;
+	int		fd;
 
 	new = (t_file *)malloc(sizeof(t_file));
 	if (!new)
-		handle_error(-1); // error 처리
-	new->data = ft_strdup(".heredoctmp");
+		return ;
+	if (global_sig == 0)
+		new->data = ft_strdup(".heredoctmp");
+	else
+	{
+		new->data = ft_strdup(".wrongway");
+		fd = open("/dev/null", O_WRONLY);
+		dup2(fd, 2);
+		close(fd);
+	}
 	if (!new->data)
-		return ; // error
+		return ;
 	new->next = NULL;
 	while (file->next)
 		file = file->next;
@@ -34,6 +43,8 @@ void	here_doc(char *del, t_file *file)
 	char	*buffer;
 	int		fd;
 
+	signal(SIGINT, handle_signal2);
+	signal(SIGQUIT, handle_signal2);
 	fd = open(".heredoctmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		return ;
@@ -50,11 +61,7 @@ void	here_doc(char *del, t_file *file)
 		write(fd, buffer, ft_strlen(buffer));
 		free(buffer);
 	}
-	if (global_sig == 0)
-		push_file_in_heredoc(file);
-	else
-		if (access(".heredoctmp", F_OK) == 0)
-			unlink(".heredoctmp");
+	push_file_in_heredoc(file);
 }
 
 void	except_heredoc(t_redir *redir)
@@ -68,7 +75,10 @@ void	except_heredoc(t_redir *redir)
 		else
 			fd = open(redir->data, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd == -1)
-			return ;
+		{
+			send_errmsg(redir->data);
+			exit(1);
+		}
 		dup2(fd, 1);
 		close(fd);
 	}
@@ -76,7 +86,10 @@ void	except_heredoc(t_redir *redir)
 	{
 		fd = open(redir->data, O_RDONLY);
 		if (fd == -1)
-			return ;
+		{
+			send_errmsg(redir->data);
+			exit(1);
+		}
 		dup2(fd, 0);
 		close(fd);
 	}

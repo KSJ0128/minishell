@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:47:22 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/04 18:19:08 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/05 15:59:25 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,21 @@
 // 명령어가 1개 일때,
 int	execute_single(t_process *proc, char ***envp)
 {
-	int			dup_fd[2];
+	int			dup_fd[3];
 	int			stat;
 	pid_t		pid;
 
 	dup_fd[0] = dup(0); 
 	dup_fd[1] = dup(1);
-	ft_redirect(proc->redirs, proc->files);
-	stat = 0;
+	dup_fd[2] = dup(2);
+	stat = ft_redirect_one(proc->redirs, proc->files);
+	if (stat)
+	{
+		dup2(dup_fd[0], 0);
+		dup2(dup_fd[1], 1);
+		dup2(dup_fd[2], 2);
+		return (stat);
+	}
 	if (ck_is_builtin(proc))
 		stat = exec_builtin(proc, envp);
 	else
@@ -41,6 +48,7 @@ int	execute_single(t_process *proc, char ***envp)
 	}
 	dup2(dup_fd[0], 0);
 	dup2(dup_fd[1], 1);
+	dup2(dup_fd[2], 2);
 	return (stat);
 }
 
@@ -119,11 +127,18 @@ void	execute(t_envi	*envi, char ***envp)
 	proc = envi->procs;
 	proc_num = proc_len(proc);
 	stat = 0;
+	signal(SIGINT, handle_signal3);
+	signal(SIGQUIT, handle_signal3);
 	if (proc_num == 1)
 		stat = execute_single(proc, envp);
 	else
 		stat = execute_multiple(proc, envp, proc_num);
 	record_exitcode(stat, envp);
 	if (access(".heredoctmp", F_OK) == 0)
+	{
 		unlink(".heredoctmp");
+		return ;
+	}
+	if (global_sig == SIGINT || global_sig == SIGQUIT)
+		write(1, "\n", 1);
 }

@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:32:58 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/04 17:47:33 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/05 17:41:54 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ char	**copy_envp(char **envp)
 	return (cp_envp);
 }
 
+
 int	main(int argc, char **argv, char **envp)
 {
 	char				*line;
@@ -127,6 +128,8 @@ int	main(int argc, char **argv, char **envp)
 		envi = (t_envi *)malloc(sizeof(t_envi));
 		if (!envi)
 			handle_error(-1);
+		if (global_sig == 2)
+			record_exitcode(1, &envp_cp);
 		parsing(envp_cp, envi, line);
 		// print_processes(envi->procs);
 		// printf("출력:\n");

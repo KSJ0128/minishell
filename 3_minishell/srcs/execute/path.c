@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:46:57 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/03 19:27:08 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/05 17:37:47 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,10 @@ void	ft_execve(t_process *proc, char **envp)
 	else
 		cmd_path = find_path(cmd, envp);
 	if (!cmd_path)
+	{
+		send_errmsg(cmd);
 		exit (127);
+	}
 	arg = mk_arg(proc, cmd_path);
 	execve(cmd_path, arg, envp); // arg[0]과 cmd_path가 같지 않아도 되는지? 만약 같아야 된다면 mk_arg 변경 필요
 }

@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 15:18:59 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/02 18:28:12 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/05 18:03:38 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,17 @@ void	handle_error(int num)
 	else if (num == 1)
 		printf("Error : Invalid quotes.\n");
 	exit (0);
+}
+
+void	send_errmsg(char *cmd)
+{
+	if (!cmd)
+	{
+		cmd = ft_strdup("minishell");
+		write(2, cmd, ft_strlen(cmd));
+		free(cmd);
+	}
+	else
+		write(2, cmd, ft_strlen(cmd));
+	perror(" ");
 }
