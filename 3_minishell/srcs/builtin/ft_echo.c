@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 15:19:14 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/02 18:03:11 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/05 17:06:04 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,14 @@ static t_file	*over_opt(t_file *file)
 		idx = 0;
 		if ((rem->data)[idx] != '-')
 			return (rem);
-		while (1)
+		idx++;
+		while ((rem->data[idx]))
 		{
-			idx++;
 			if ((rem->data)[idx] != 'n')
 				return (rem);
-			if (!(rem->data)[idx + 1])
-			{
-				rem = file->next;
-				break ;
-			}
+			idx++;
 		}
+		rem = rem->next;
 	}
 	return (rem);
 }

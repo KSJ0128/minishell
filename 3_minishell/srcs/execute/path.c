@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:46:57 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/02 21:33:20 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/05 20:12:56 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*mk_path(char **envp)
 	int		idx2;
 
 	mark = 0;
-	while (envp[mark]) // PATH가 없는 경우도 생각해야하나?
+	while (envp[mark])
 	{
 		if (ft_strncmp("PATH=", envp[mark], 5) == 0)
 			break ;
@@ -29,7 +29,7 @@ char	*mk_path(char **envp)
 	}
 	path = (char *)malloc(sizeof(char) * ((int)ft_strlen(envp[mark]) - 4));
 	if (!path)
-		return (0); // error 나중에 생각 해서 바꾸기
+		return (0); // error 체크
 	idx = 0;
 	idx2 = 5;
 	while (envp[mark][idx2])
@@ -136,7 +136,7 @@ void	ft_execve(t_process *proc, char **envp)
 	else
 		cmd_path = find_path(cmd, envp);
 	if (!cmd_path)
-		exit (127); // 시그널로 하는 거 아님
+		send_errmsg(cmd, 127);
 	arg = mk_arg(proc, cmd_path);
-	execve(cmd_path, arg, envp); // arg[0]과 cmd_path가 같지 않아도 되는지? 만약 같아야 된다면 mk_arg 변경 필요
+	execve(cmd_path, arg, envp);
 }

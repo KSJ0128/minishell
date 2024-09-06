@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 11:37:11 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/02 18:45:42 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/05 20:40:27 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void	print_envp(char *str)
 			strlst = ft_split(str, '=');
 			if (!strlst)
 				handle_error(-1);
-			printf("declare -x %s=", strlst[0]); // 이부분에서 null이 나오면 어떻게 하나? -> input을 받을 때 처리해줘야 함, `=abx': not a valid identifier 이런식으로
+			printf("declare -x %s=", strlst[0]);
 			idx2 = 1;
 			while (strlst[idx2])
 			{
@@ -39,7 +39,7 @@ static void	print_envp(char *str)
 			return ;
 		}
 	}
-	printf("declare -x %s\n", str);	
+	printf("declare -x %s\n", str);
 }
 
 // envp 뒤에 하나를 더 추가해서 새로운 envp를 만드는 부분
@@ -125,7 +125,7 @@ int	ft_export(t_file *file, char ***envp)
 		return (0);
 	}
 	if (!ck_export_valid(file->data))
-		return (perror("not a valid identifier"), 1);
+		return (send_errmsg_export(file->data, 1));
 	else
 	{
 		if (join_envp(envp, file->data))

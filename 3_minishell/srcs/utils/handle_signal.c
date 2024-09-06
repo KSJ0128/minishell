@@ -3,44 +3,64 @@
 /*                                                        :::      ::::::::   */
 /*   handle_signal.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 15:54:58 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/04 13:16:34 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/05 20:13:41 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// ctrl+c 프롬프트 출력 방지
-void	set_termios()
+void	handle_signal(int sig)
 {
-	struct termios term;
-	tcgetattr(STDIN_FILENO, &term);
-	term.c_lflag &= ~ICANON;
+	global_sig = sig;
+	if (sig == SIGINT)
+	{
+		rl_replace_line("", 0);
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	else if (sig == SIGQUIT)
+	{
+		rl_on_new_line();
+		rl_redisplay();
+	}
+}
+
+void	handle_signal2(int sig)
+{
+	global_sig = sig;
+	if (sig == SIGINT)
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+}
+
+void	handle_signal3(int sig)
+{
+	global_sig = sig;
+}
+
+void	init_sig_termi(void)
+{
+	struct termios	term;
+
+	global_sig = 0;
+	tcgetattr(STDOUT_FILENO, &term);
 	term.c_lflag &= ~ECHOCTL;
-	tcsetattr(STDIN_FILENO, TCSANOW, &term);
+	tcsetattr(STDOUT_FILENO, TCSANOW, &term);
+	signal(SIGINT, handle_signal);
+	signal(SIGQUIT, handle_signal);
 }
 
-void	handle_sigusr1(int sig)
+void	reset_sig_termi(void)
 {
-	signal(sig, SIG_IGN);
-	printf("Error : Malloc Error.\n");
-	return ;
-}
+	struct termios	term;
 
-void	handle_sigusr2(int sig) // erorr msg가 두 번 발생함
-{
-	signal(sig, SIG_IGN);
-	printf("Error: Son always breaks his parent's hearts\n");
-	return ;
-}
-
-void	handle_sigint()
-{
-	printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-	return ;
+	tcgetattr(STDOUT_FILENO, &term);
+	term.c_lflag |= ECHOCTL;
+	term.c_lflag |= ICANON;
+	tcsetattr(STDOUT_FILENO, TCSANOW, &term);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 }
