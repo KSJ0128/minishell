@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:52:18 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/02 20:56:44 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/06 17:55:43 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	push_file_in_heredoc(t_file *file)
 	file->next = new;
 }
 
-void	here_doc(char *del, t_file *file) // 임시 파일 만들고, 지워줘야 함
+void	here_doc(char *del, t_file *file, char **envp) // 임시 파일 만들고, 지워줘야 함
 {
 	char	*buffer;
 	int		fd;
@@ -46,6 +46,7 @@ void	here_doc(char *del, t_file *file) // 임시 파일 만들고, 지워줘야 
 			free(buffer);
 			break ;
 		}
+		expand_heredoc(envp, &buffer);
 		write(fd, buffer, ft_strlen(buffer));
 		free(buffer);
 	}
@@ -78,13 +79,13 @@ void	except_heredoc(t_redir *redir)
 }
 
 // redirect 을 수행해줌
-void	ft_redirect(t_redir *redir, t_file *file)
+void	ft_redirect(t_redir *redir, t_file *file, char **envp)
 {
 	while (redir)
 	{
 		except_heredoc(redir);
 		if (redir->type == 4)
-			here_doc(redir->data, file);
+			here_doc(redir->data, file, envp);
 		redir = redir->next;
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:47:22 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/02 21:33:07 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/06 17:52:54 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ int	execute_single(t_process *proc, char ***envp)
 	int			stat;
 	pid_t		pid;
 
-	dup_fd[0] = dup(0); 
+	dup_fd[0] = dup(0);
 	dup_fd[1] = dup(1);
-	ft_redirect(proc->redirs, proc->files);
+	ft_redirect(proc->redirs, proc->files, *envp);
 	stat = 0;
 	if (ck_is_builtin(proc))
 		stat = exec_builtin(proc, envp);
@@ -31,7 +31,10 @@ int	execute_single(t_process *proc, char ***envp)
 		if (pid == -1)
 			handle_error(0);
 		else if (pid == 0)
+		{
+			restore_signal();
 			ft_execve(proc, *envp);
+		}
 		else
 			stat = get_exitcode(pid, 1);
 	}
@@ -55,7 +58,7 @@ void	execute_child(t_process *proc, int (*pipe_fd)[2], int *rem_fd, char ***envp
 		close(*rem_fd);
 	}
 	close((*pipe_fd)[0]);
-	ft_redirect(proc->redirs, proc->files);
+	ft_redirect(proc->redirs, proc->files, *envp);
 	if (ck_is_builtin(proc))
 	{
 		stat = exec_builtin(proc, envp);
@@ -77,13 +80,16 @@ int	execute_multiple(t_process *proc, char ***envp, int proc_num)
 	stat = 0;
 	while (proc)
 	{
-		if (pipe(pipe_fd) != 0 )
+		if (pipe(pipe_fd) != 0)
 			return (1);
 		pid = fork();
 		if (pid == -1)
 			handle_error(0);
 		else if (pid == 0)
+		{
+			restore_signal();
 			execute_child(proc, &pipe_fd, &rem_fd, envp);
+		}
 		else
 		{
 			close(pipe_fd[1]);

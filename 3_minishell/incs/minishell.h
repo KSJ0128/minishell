@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:33:42 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/03 21:14:35 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/06 17:55:30 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,9 @@
 # include "libft.h"
 # include <signal.h> // signal, kill 사용을 웨해 추가
 # include <fcntl.h> // open 함수 사용을 위해 추가
-# include <termios.h>
+# include <termios.h> // terminal 설정제어(SIGINT, SIGQUIT)
+
+extern int	global_sig;
 
 //노트북
 // #include "readline/readline.h"
@@ -135,6 +137,14 @@ void	make_process(t_envi *envi);
 void	setting_etc(t_envi *envi);
 void	setting(t_envi *envi);
 
+// heredoc.c
+void	change_heredoc(char **line, char *key, char *val);
+int		ft_strcmp(const char *s1, const char *s2);
+char	*get_value(char *str);
+char	*get_key(char *str, int code);
+char	*can_change_heredoc(char **envp, char *key);
+void	expand_heredoc(char **envp, char **line);
+
 /*****************************************************/
 /* execute */
 // execute.c
@@ -144,7 +154,10 @@ void	execute(t_envi	*envi, char ***envp);
 void	ft_execve(t_process *proc, char **envp);
 
 // redirect.c
-void	ft_redirect(t_redir *redir, t_file *file);
+void	push_file_in_heredoc(t_file *file);
+void	ft_redirect(t_redir *redir, t_file *file, char **envp);
+void	here_doc(char *del, t_file *file, char **envp);
+void	except_heredoc(t_redir *redir);
 
 /* builtin */ // 오류 처리를 어떻게 해야할 지 모르겠음
 int		ft_echo(t_file *file);
@@ -173,9 +186,10 @@ char	**mk_arg(t_process *proc, char *cmd_path);
 
 // handle_signal.c
 void	set_termios(t_termios *term);
-void	handle_sigusr1(int sig);
-void	handle_sigusr2(int sig);
-void	handle_sigint();
+void	handle_signal(int sig);
+void	init_signal(void);
+void	restore_signal(void);
+void	hello_eof(void);
 
 /* get_next_line */
 // get_next_line.c

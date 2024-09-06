@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 15:54:58 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/03 21:26:02 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/03 22:13:45 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,31 +17,42 @@ void	set_termios(t_termios *term)
 {
 	tcgetattr(STDIN_FILENO, &term->old_term);
 	tcgetattr(STDIN_FILENO, &term->new_term);
-	term->new_term.c_lflag &= ~ICANON;
-	term->new_term.c_lflag &= ~ECHOCTL;
+	term->new_term.c_lflag = ~ICANON;
+	term->new_term.c_lflag = ~ECHOCTL;
 	tcsetattr(STDIN_FILENO, TCSANOW, &term->new_term);
 }
 
-
-void	handle_sigusr1(int sig)
+void	handle_signal(int sig)
 {
-	signal(sig, SIG_IGN);
-	printf("Error : Malloc Error.\n");
-	return ;
+	global_sig = sig;
+	if (sig == SIGINT)
+	{
+		rl_replace_line("", 0);
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	else if (sig == SIGQUIT)
+	{
+		rl_on_new_line();
+		rl_redisplay();
+	}
 }
 
-void	handle_sigusr2(int sig) // erorr msg가 두 번 발생함
+void	init_signal(void)
 {
-	signal(sig, SIG_IGN);
-	printf("Error: Son always breaks his parent's hearts\n");
-	return ;
+	signal(SIGINT, handle_signal);
+	signal(SIGQUIT, handle_signal);
 }
 
-void	handle_sigint()
+void	restore_signal(void)
 {
-	printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-	return ;
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+}
+
+void	hello_eof(void)
+{
+	printf("\033[1A\033[12Cexit\n");
+	exit(0);
 }

@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 17:43:31 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/02 21:02:14 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/03 19:03:32 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	get_exitcode(pid_t last, int proc_num)
 			if (WIFEXITED(stat))
 				exitcode = WEXITSTATUS(stat);
 			else
-				exitcode = 128; // 여기에 signal을 더해줘야 함
+				exitcode = 128 + global_sig;
 		}
 		proc_num--;
 	}

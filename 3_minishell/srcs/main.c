@@ -6,11 +6,13 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:32:58 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/03 21:16:29 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/06 17:58:05 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	global_sig;
 
 // 환경 설정 관련 함수, 로직 중간에 또 쓰이는 부분이 있어 따로 빼주었습니다.
 void	setting_etc(t_envi *envi)
@@ -111,23 +113,24 @@ int	main(int argc, char **argv, char **envp)
 	char		**envp_cp;
 	t_envi		*envi;
 
+	(void)argc;
 	(void)argv;
 	if (argc != 1)
 		handle_error(0);
 	envp_cp = copy_envp(envp);
-	signal(SIGINT, handle_sigint);
+	init_signal();
 	while (1)
 	{
 		line = readline("\033[34mminishell$>\033[0m ");
 		if (!line)
+			hello_eof();
+		if (!(*line))
 			continue ;
 		add_history(line);
 		envi = (t_envi *)malloc(sizeof(t_envi));
 		if (!envi)
 			handle_error(-1);
 		parsing(envp_cp, envi, line);
-		print_processes(envi->procs);
-		printf("출력:\n");
 		execute(envi, &envp_cp);
 		free_envi(envi);
 	}
