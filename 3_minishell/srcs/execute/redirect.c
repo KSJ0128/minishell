@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:52:18 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/05 19:59:18 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/06 14:24:57 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	except_heredoc(t_redir *redir)
 		else
 			fd = open(redir->data, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd == -1)
-			send_errmsg(redir->data, 1);
+			send_errmsg(redir->data, ": No such file or directory\n", 1);
 		dup2(fd, 1);
 		close(fd);
 	}
@@ -83,7 +83,7 @@ void	except_heredoc(t_redir *redir)
 	{
 		fd = open(redir->data, O_RDONLY);
 		if (fd == -1)
-			send_errmsg(redir->data, 1);
+			send_errmsg(redir->data, ": No such file or directory\n", 1);
 		dup2(fd, 0);
 		close(fd);
 	}

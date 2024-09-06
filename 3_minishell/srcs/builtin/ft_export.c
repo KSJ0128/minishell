@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 11:37:11 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/05 20:40:27 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/06 14:38:52 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int	ft_export(t_file *file, char ***envp)
 		return (0);
 	}
 	if (!ck_export_valid(file->data))
-		return (send_errmsg_export(file->data, 1));
+		return (send_errmsg_in(file->data, ": No such file or directory\n", 1));
 	else
 	{
 		if (join_envp(envp, file->data))

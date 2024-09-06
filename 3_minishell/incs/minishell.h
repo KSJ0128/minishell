@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:33:42 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/05 20:40:07 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/06 16:56:18 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@
 # include <signal.h> // signal, kill 사용을 웨해 추가
 # include <fcntl.h> // open 함수 사용을 위해 추가
 # include <termios.h> // terminal 설정제어(SIGINT, SIGQUIT)
-#include <sys/ioctl.h> // heredoc_handler
+# include <sys/ioctl.h> // heredoc_handler
+# include <sys/stat.h> // 파일 폴더 구별위해서 (ft_execute)
 
 extern int	global_sig;
 
@@ -92,8 +93,8 @@ typedef struct envi
 
 // error.c
 void	handle_error(int num);
-void	send_errmsg(char *cmd, int exitcode);
-int		send_errmsg_export(char *cmd, int code);
+void	send_errmsg(char *cmd, char *msg, int exitcode);
+int		send_errmsg_in(char *cmd, char *msg, int code);
 
 // free.c
 void	change_data(t_token *token, char *str);

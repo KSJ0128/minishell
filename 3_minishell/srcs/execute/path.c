@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:46:57 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/05 20:12:56 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/06 16:12:29 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,17 +126,29 @@ char	**mk_arg(t_process *proc, char *cmd_path)
 // 유효한 path가 있으면 실행 없으면, cmd없다는 메세지 내보내기
 void	ft_execve(t_process *proc, char **envp)
 {
-	char	*cmd;
-	char	*cmd_path;
-	char	**arg;
+	char		*cmd;
+	char		*cmd_path;
+	char		**arg;
+	struct stat	cmd_stat;
 
 	cmd = proc->files->data;
-	if (access(cmd, F_OK | X_OK) == 0)
-		cmd_path = cmd;
+	cmd_path = 0;
+	if (stat(cmd, &cmd_stat) == 0)
+	{
+		if (S_ISDIR(cmd_stat.st_mode))
+			send_errmsg(cmd, " : is a directory\n", 126);
+		else if (S_ISREG(cmd_stat.st_mode))
+		{
+			if (access("cmd", X_OK) == 0)
+				cmd_path = cmd;
+			else
+				send_errmsg(cmd, " : Permission denied\n", 126);
+		}
+	}
 	else
 		cmd_path = find_path(cmd, envp);
 	if (!cmd_path)
-		send_errmsg(cmd, 127);
+		send_errmsg(cmd, " : command not found\n", 127);
 	arg = mk_arg(proc, cmd_path);
 	execve(cmd_path, arg, envp);
 }
