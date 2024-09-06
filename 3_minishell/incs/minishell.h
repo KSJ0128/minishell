@@ -111,11 +111,13 @@ int		check_deli(char *line, t_envi *envi, int start, int idx);
 // parsing.c
 void	add_token(char *line, t_envi *envi, int start, int idx);
 void	tokenize(char *line, t_envi *envi);
+void	quote_compare(t_envi *envi, char *str, char *tmp);
 void	remove_quote(t_envi *envi);
 void	parsing(char **envp, t_envi *envi, char *str);
 
 // expand.c
 void	change_var(t_token *token, char *var, int d_idx, int s_idx);
+void	remove_var(t_token *token, int d_idx);
 void	can_change_var(char **envp, t_token *token, char *str, int d_idx);
 int		is_special_var(t_token *now, int idx, char c);
 void	set_out_quote(char quote, t_envi *envi);
