@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 15:19:14 by seungbel          #+#    #+#             */
-/*   Updated: 2024/08/22 14:03:18 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/02 18:03:11 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	ft_echo(t_file *file)
 	if (!file)
 	{
 		printf("\n");
-		return (-1);
+		return (0);
 	}
 	first = file;
 	rem = over_opt(file);

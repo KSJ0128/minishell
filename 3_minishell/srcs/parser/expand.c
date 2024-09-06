@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 11:36:17 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/24 15:35:36 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/04 17:05:30 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,21 @@ void	change_var(t_token *token, char *var, int d_idx, int v_idx)
 	ft_strlcat(tmp, var, ft_strlen(tmp) + ft_strlen(var) + 1);
 	ft_strlcat(tmp, str + v_idx, ft_strlen(tmp) + ft_strlen(str + v_idx) + 1);
 	change_data(token, tmp);
+}
+
+// 존재하지 않는 환경 변수 처리
+void	remove_var(t_token *token, int d_idx)
+{
+	int		d_len;
+	char	*str;
+	char	*src;
+
+	d_len = 0;
+	str = token->data + d_idx + 1;
+	while (str[d_len] != '\0' && (ft_isalnum(str[d_len]) || str[d_len] == '_'))
+		d_len++;
+	src = token->data + d_idx + d_len + 1; // 잘라내려는 부분의 시작 위치
+	ft_memmove(str - 1, src, ft_strlen(src) + 1); // src를 $ 위치에 덮어씀
 }
 
 // envp 내에서 변환 가능한 환경변수 있는지 탐색
@@ -57,16 +72,18 @@ void	can_change_var(char **envp, t_token *token, char *str, int d_idx)
 		}
 		ptr++;
 	}
+	return (remove_var(token, d_idx));
 }
 
-// $ 관련 특수문자 체크, 아직 따로 처리 로직은 작성 안했습니다
-int	is_special_var(char c)
+// $ 관련 특수문자 체크
+int	is_special_var(t_token *now, int idx, char c)
 {
 	if (c == '$') // 현재 프로세스의 pid
+	{
+		change_var(now, ft_itoa(getpid()), idx, idx + 2);
 		return (TRUE);
+	}
 	else if (c == '0') // 현재 실행 중인 스크립트의 이름을 반환
-		return (TRUE);
-	else if (c == '?') // 마지막으로 실행된 명령의 종료 상태 (Exit status)를 반환(필수), 0이면 성공
 		return (TRUE);
 	else if (c == '!') // 마지막으로 실행된 백그라운드 작업의 프로세스 ID를 반환
 		return (TRUE);
@@ -109,7 +126,7 @@ void	expand_var(char **envp, t_envi *envi)
 				set_out_quote(now->data[idx], envi);
 			else if (now->data[idx] == '$' && envi->out_quote != '\'') // $ 만나고, 외부 따옴표가 '가 아닌 경우
 			{
-				if (!is_special_var(now->data[idx + 1])) // $ 뒤에 의미 가지는 특별한 문자 오는 경우
+				if (!is_special_var(now, idx, now->data[idx + 1])) // $ 뒤에 의미 가지는 특별한 문자 오는 경우
 					can_change_var(envp, now, now->data + idx + 1, idx);
 			}
 			idx++;

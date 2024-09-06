@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 11:37:11 by seungbel          #+#    #+#             */
-/*   Updated: 2024/08/30 12:43:48 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/02 18:45:42 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,9 @@ int	join_envp(char ***envp, char *str)
 	return (idx < len);
 }
 
-void	ft_export(t_file *file, char ***envp)
+// return 에 2개 넣어도 norm에 안 걸리나?
+int	ft_export(t_file *file, char ***envp)
 {
-	char	*str;
 	char	**new_envp;
 	int		idx;
 
@@ -122,17 +122,17 @@ void	ft_export(t_file *file, char ***envp)
 				print_envp((*envp)[idx]);
 			idx++;
 		}
-		return ;
+		return (0);
 	}
-	str = file->data;
-	if (*str == '=' || ft_strncmp(str, "?=", 2) == 0)
-		perror("not a valid identifier");
+	if (!ck_export_valid(file->data))
+		return (perror("not a valid identifier"), 1);
 	else
 	{
-		if (join_envp(envp, str))
-			return ;
-		new_envp = add_envp(*envp, str);
+		if (join_envp(envp, file->data))
+			return (0);
+		new_envp = add_envp(*envp, file->data);
 		free_lst(*envp);
 		*envp = new_envp;
 	}
+	return (0);
 }

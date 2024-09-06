@@ -6,23 +6,25 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:47:22 by seungbel          #+#    #+#             */
-/*   Updated: 2024/08/30 11:23:43 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/02 21:33:07 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // 명령어가 1개 일때,
-void	execute_single(t_process *proc, char ***envp)
+int	execute_single(t_process *proc, char ***envp)
 {
 	int			dup_fd[2];
+	int			stat;
 	pid_t		pid;
 
-	dup_fd[0] = dup(0);
+	dup_fd[0] = dup(0); 
 	dup_fd[1] = dup(1);
 	ft_redirect(proc->redirs, proc->files);
+	stat = 0;
 	if (ck_is_builtin(proc))
-		exec_builtin(proc, envp);
+		stat = exec_builtin(proc, envp);
 	else
 	{
 		pid = fork();
@@ -31,15 +33,19 @@ void	execute_single(t_process *proc, char ***envp)
 		else if (pid == 0)
 			ft_execve(proc, *envp);
 		else
-			wait(NULL);
+			stat = get_exitcode(pid, 1);
 	}
 	dup2(dup_fd[0], 0);
 	dup2(dup_fd[1], 1);
+	return (stat);
 }
 
 // (명령어가 여러 개 일 때,) 자식 프로세스의 일
 void	execute_child(t_process *proc, int (*pipe_fd)[2], int *rem_fd, char ***envp)
 {
+	int	stat;
+
+	stat = 0;
 	if (proc->next)
 		dup2((*pipe_fd)[1], 1);
 	close((*pipe_fd)[1]);
@@ -52,24 +58,27 @@ void	execute_child(t_process *proc, int (*pipe_fd)[2], int *rem_fd, char ***envp
 	ft_redirect(proc->redirs, proc->files);
 	if (ck_is_builtin(proc))
 	{
-		exec_builtin(proc, envp);
-		exit(0);
+		stat = exec_builtin(proc, envp);
+		exit(stat);
 	}
 	else
 		ft_execve(proc, *envp);
 }
 
 // 명령어가 여러 개 일 때,
-void	execute_multiple(t_process *proc, char ***envp)
+int	execute_multiple(t_process *proc, char ***envp, int proc_num)
 {
 	int			pipe_fd[2];
 	int			rem_fd;
+	int			stat;
 	pid_t		pid;
 
 	rem_fd = -1;
+	stat = 0;
 	while (proc)
 	{
-		pipe(pipe_fd); // 오류 처리 해줘야 할 듯
+		if (pipe(pipe_fd) != 0 )
+			return (1);
 		pid = fork();
 		if (pid == -1)
 			handle_error(0);
@@ -87,25 +96,24 @@ void	execute_multiple(t_process *proc, char ***envp)
 		}
 		proc = proc->next;
 	}
+	stat = get_exitcode(pid, proc_num);
+	return (stat);
 }
 
 void	execute(t_envi	*envi, char ***envp)
 {
 	t_process	*proc;
 	int			proc_num;
-	int			idx;
+	int			stat;
 
 	proc = envi->procs;
 	proc_num = proc_len(proc);
+	stat = 0;
 	if (proc_num == 1)
-		execute_single(proc, envp);
+		stat = execute_single(proc, envp);
 	else
-	{
-		execute_multiple(proc, envp);
-		idx = 0;
-		while (idx++ < proc_num)
-			wait(NULL);
-	}
+		stat = execute_multiple(proc, envp, proc_num);
+	record_exitcode(stat, envp);
 	if (access(".heredoctmp", F_OK) == 0)
 		unlink(".heredoctmp");
 }

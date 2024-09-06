@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 17:07:27 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/24 15:37:47 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/04 15:08:19 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,35 @@ void	tokenize(char *line, t_envi *envi)
 		add_token(line, envi, start, idx); // 널 문자 만났을 때 토큰 추가
 }
 
+void	quote_compare(t_envi *envi, char *str, char *tmp)
+{
+	int		tmp_idx;
+	int		idx;
+
+	idx = 0;
+	tmp_idx = 0;
+	while (str[idx] != '\0')
+	{
+		if (str[idx] != '\'' && str[idx] != '\"') // 따옴표 제외하고 새 문자열 생성
+			tmp[tmp_idx++] = str[idx];
+		else if (envi->out_quote == '\0')
+			envi->out_quote = str[idx];
+		else if (envi->out_quote != str[idx])
+			tmp[tmp_idx++] = str[idx];
+		else if (envi->out_quote == str[idx])
+			envi->out_quote = NULL;
+		idx++;
+	}
+	tmp[tmp_idx] = '\0';
+}
+
 // 토큰 내 따옴표 제거
 void	remove_quote(t_envi *envi)
 {
 	t_token *now;
 	char	*str;
 	char	*tmp;
-	int		tmp_idx;
-	int		idx;
+
 
 	now = envi->tokens;
 	while (now != NULL && now->data != NULL)
@@ -81,15 +102,7 @@ void	remove_quote(t_envi *envi)
 		tmp = (char *)malloc(sizeof(char) * (ft_strlen(str) + 1));
 		if (!tmp)
 			handle_error(-1);
-		idx = 0;
-		tmp_idx = 0;
-		while (str[idx] != '\0')
-		{
-			if (str[idx] != '\'' && str[idx] != '\"') // 따옴표 제외하고 새 문자열 생성
-				tmp[tmp_idx++] = str[idx];
-			idx++;
-		}
-		tmp[tmp_idx] = '\0';
+		quote_compare(envi, str, tmp);
 		change_data(now, tmp); // 토큰 데이터 교체
 		now = now->next;
 	}

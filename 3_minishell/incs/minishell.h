@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:33:42 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/29 11:15:55 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/04 17:09:17 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 # include "libft.h"
 # include <signal.h> // signal, kill 사용을 웨해 추가
 # include <fcntl.h> // open 함수 사용을 위해 추가
+# include <termios.h>
 
 //노트북
 // #include "readline/readline.h"
@@ -88,6 +89,7 @@ typedef struct envi
 
 // error.c
 void	handle_error(int num);
+void	perror_exit(char *str, int code);
 
 // free.c
 void	change_data(t_token *token, char *str);
@@ -105,13 +107,16 @@ int		check_deli(char *line, t_envi *envi, int start, int idx);
 // parsing.c
 void	add_token(char *line, t_envi *envi, int start, int idx);
 void	tokenize(char *line, t_envi *envi);
+void	quote_compare(t_envi *envi, char *str, char *tmp);
 void	remove_quote(t_envi *envi);
 void	parsing(char **envp, t_envi *envi, char *str);
 
 // expand.c
-void	set_out_quote(char quote, t_envi *envi);
 void	change_var(t_token *token, char *var, int d_idx, int s_idx);
+void	remove_var(t_token *token, int d_idx);
 void	can_change_var(char **envp, t_token *token, char *str, int d_idx);
+int		is_special_var(t_token *now, int idx, char c);
+void	set_out_quote(char quote, t_envi *envi);
 void	expand_var(char **envp, t_envi *envi);
 
 // process.c
@@ -139,18 +144,20 @@ void	ft_redirect(t_redir *redir, t_file *file);
 /* builtin */ // 오류 처리를 어떻게 해야할 지 모르겠음
 int		ft_echo(t_file *file);
 int		ft_pwd(void);
-void	ft_cd(t_file *file);
-void	ft_export(t_file *file, char ***envp);
-void	ft_env(char **envp);
-void	ft_unset(char ***envp, t_file *file);
-void	ft_exit(t_file *file);
+int		ft_cd(t_file *file);
+int		ft_export(t_file *file, char ***envp);
+int		ft_env(char **envp);
+int		ft_unset(char ***envp, t_file *file);
+void	ft_exit(t_file *file); // 진짜 끝내는 거니까 상관없지 않나?
 
 // builtin.c
 int		ck_is_builtin(t_process *proc);
-void	exec_builtin(t_process *proc, char ***envp);
+int		exec_builtin(t_process *proc, char ***envp);
+int		ck_export_valid(char *name);
 
 // ft_export.c
 int		find_str(char *en, char *str);
+int		join_envp(char ***envp, char *str);
 
 // handle_lst.c
 int		ft_lstlen(char **lst);
@@ -160,8 +167,10 @@ int		ft_filelen(t_file *file);
 char	**mk_arg(t_process *proc, char *cmd_path);
 
 // handle_signal.c
+void	set_termios();
 void	handle_sigusr1(int sig);
 void	handle_sigusr2(int sig);
+void	handle_sigint();
 
 /* get_next_line */
 // get_next_line.c
@@ -170,4 +179,7 @@ char	*get_next_line(int fd);
 // get_next_line_utils.c
 int		ft_strchr_num(const char *s, int c, int *bk_idx);
 
+// exit.c
+int		get_exitcode(pid_t last, int proc_num); // signal 추가 해주기
+void	record_exitcode(int code, char ***envp);
 #endif
