@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:22:28 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/07 17:28:01 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/07 22:20:10 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,10 @@ void	free_lst(char **lst)
 	free(lst);
 }
 
-char	**free_arg(int idx, char ***arg)
+void	free_arg(int idx, char ***arg)
 {
 	while (--idx >= 0)
 		free((*arg)[idx]);
 	free(*arg);
-	return (0);
+	send_errmsg(NULL, " : Malloc Error\n", 1);
 }

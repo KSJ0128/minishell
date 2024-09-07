@@ -6,40 +6,25 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:46:57 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/07 17:27:53 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/07 22:19:50 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// PATH를 가진 str을 만듦
+// PATH를 가진 str의 주소값을 반환
 char	*mk_path(char **envp)
 {
-	char	*path;
 	int		mark;
-	int		idx;
-	int		idx2;
 
 	mark = 0;
 	while (envp[mark])
 	{
 		if (ft_strncmp("PATH=", envp[mark], 5) == 0)
-			break ;
+			return (envp[mark] + 5);
 		mark++;
 	}
-	path = (char *)malloc(sizeof(char) * ((int)ft_strlen(envp[mark]) - 4));
-	if (!path)
-		return (0); // error 체크
-	idx = 0;
-	idx2 = 5;
-	while (envp[mark][idx2])
-	{
-		path[idx] = envp[mark][idx2];
-		idx++;
-		idx2++;
-	}
-	path[idx] = 0;
-	return (path);
+	return (0);
 }
 
 // 유효한 cmd_path만 반환
@@ -50,11 +35,11 @@ char	*mk_cmdpath(char *cmd, char *path)
 
 	full_path = ft_strjoin(path, "/");
 	if (!full_path)
-		return (0);
+		send_errmsg(NULL, " : Malloc Error\n", 1);
 	cmd_path = ft_strjoin(full_path, cmd);
 	free(full_path);
 	if (!cmd_path)
-		return (0);
+		send_errmsg(NULL, " : Malloc Error\n", 1);
 	if (access(cmd_path, F_OK | X_OK) == 0)
 		return (cmd_path);
 	else
@@ -78,7 +63,7 @@ char	*find_path(char *cmd, char **envp)
 	pathlst = ft_split(path, ':');
 	free(path);
 	if (!pathlst)
-		return (0);
+		send_errmsg(NULL, " : Malloc Error\n", 1);
 	idx = 0;
 	while (pathlst[idx])
 	{
@@ -106,7 +91,7 @@ char	**mk_arg(t_process *proc, char *cmd_path)
 	file_len = ft_filelen(file);
 	arg = (char **)malloc(sizeof(char *) * (file_len + 1));
 	if (!arg)
-		return (0);
+		send_errmsg(NULL, " : Malloc Error\n", 1);
 	idx = 0;
 	while (file)
 	{
@@ -115,7 +100,7 @@ char	**mk_arg(t_process *proc, char *cmd_path)
 		else
 			arg[idx] = ft_strdup(file->data);
 		if (!arg[idx])
-			return (free_arg(idx, &arg));
+			free_arg(idx, &arg);
 		idx++;
 		file = file->next;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 17:07:27 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/24 15:37:47 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/07 22:33:19 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,4 +104,5 @@ void	parsing(char **envp, t_envi *envi, char *line)
 	expand_var(envp, envi); // 환경변수 확장
 	remove_quote(envi); // 따옴표 제거
 	make_process(envi); // 프로세스 구조체 리스트 생성
+	free(line); // leak 해결 위해서
 }

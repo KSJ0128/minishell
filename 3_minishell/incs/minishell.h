@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:33:42 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/07 17:29:07 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/07 22:20:18 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ void	ft_exit(t_file *file); // 진짜 끝내는 거니까 상관없지 않나?
 int		ck_is_builtin(t_process *proc);
 int		exec_builtin(t_process *proc, char ***envp);
 int		ck_export_valid(char *name);
+void	printf_free(char **str);
 
 // ft_export.c
 int		find_str(char *en, char *str);
@@ -174,7 +175,7 @@ int		ft_lstlen(char **lst);
 void	free_lst(char **lst);
 int		proc_len(t_process *proc);
 int		ft_filelen(t_file *file);
-char	**free_arg(int idx, char ***arg);
+void	free_arg(int idx, char ***arg);
 
 // handle_signal.c
 void	handle_signal(int sig);

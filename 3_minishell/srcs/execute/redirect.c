@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:52:18 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/06 14:24:57 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/07 22:55:47 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	push_file_in_heredoc(t_file *file)
 
 	new = (t_file *)malloc(sizeof(t_file));
 	if (!new)
-		return ;
+		send_errmsg_in(NULL, "Malloc error\n", 1);
 	if (global_sig == 0)
 		new->data = ft_strdup(".heredoctmp");
 	else
@@ -30,7 +30,7 @@ void	push_file_in_heredoc(t_file *file)
 		close(fd);
 	}
 	if (!new->data)
-		return ;
+		send_errmsg_in(NULL, "Malloc error\n", 1);
 	new->next = NULL;
 	while (file->next)
 		file = file->next;
@@ -42,18 +42,20 @@ void	here_doc(char *del, t_file *file)
 {
 	char	*buffer;
 	int		fd;
+	int		len;
 
 	signal(SIGINT, handle_signal2);
 	signal(SIGQUIT, handle_signal2);
 	fd = open(".heredoctmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
-		return ;
+		send_errmsg_in(NULL, "File didn't open. Sorry\n", 1);
 	while (global_sig == 0)
 	{
 		buffer = get_next_line(0);
 		if (!buffer)
-			return ;
-		if (ft_strncmp(buffer, del, ft_strlen(del)) == 0)
+			send_errmsg_in(NULL, "Malloc error\n", 1);
+		len = ft_strlen(del);
+		if (ft_strncmp(buffer, del, len) == 0 && buffer[len] == '\n')
 		{
 			free(buffer);
 			break ;

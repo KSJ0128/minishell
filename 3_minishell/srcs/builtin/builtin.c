@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:49:14 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/07 14:08:44 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/07 21:32:00 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,11 @@ int	ck_export_valid(char *name)
 			return (0);
 	}
 	return (1);
+}
+
+//  print_envp 줄이기
+void	printf_free(char **str)
+{
+	printf("\"%s", *str);
+	free(*str);
 }

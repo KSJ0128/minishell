@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 11:37:11 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/06 14:38:52 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/07 21:31:57 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,17 @@ static void	print_envp(char *str)
 			strlst = ft_split(str, '=');
 			if (!strlst)
 				handle_error(-1);
-			printf("declare -x %s=", strlst[0]);
+			printf("%s=", strlst[0]);
+			free(strlst[0]);
 			idx2 = 1;
 			while (strlst[idx2])
-			{
-				printf("\"%s", strlst[idx2]);
-				free(strlst[idx2++]);
-			}
+				printf_free(&strlst[idx2++]);
 			free(strlst);
 			printf("\"\n");
 			return ;
 		}
 	}
-	printf("declare -x %s\n", str);
+	printf("%s\n", str);
 }
 
 // envp 뒤에 하나를 더 추가해서 새로운 envp를 만드는 부분
