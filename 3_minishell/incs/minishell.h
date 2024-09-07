@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:33:42 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/07 14:08:23 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/07 17:29:07 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,10 @@ void	execute(t_envi	*envi, char ***envp);
 
 // path.c
 void	ft_execve(t_process *proc, char **envp);
+char	**mk_arg(t_process *proc, char *cmd_path);
+char	*find_path(char *cmd, char **envp);
+char	*mk_cmdpath(char *cmd, char *path);
+char	*mk_path(char **envp);
 
 // redirect.c
 void	ft_redirect(t_redir *redir, t_file *file);
@@ -170,7 +174,7 @@ int		ft_lstlen(char **lst);
 void	free_lst(char **lst);
 int		proc_len(t_process *proc);
 int		ft_filelen(t_file *file);
-char	**mk_arg(t_process *proc, char *cmd_path);
+char	**free_arg(int idx, char ***arg);
 
 // handle_signal.c
 void	handle_signal(int sig);

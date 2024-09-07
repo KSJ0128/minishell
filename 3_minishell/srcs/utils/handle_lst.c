@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:22:28 by seungbel          #+#    #+#             */
-/*   Updated: 2024/08/27 20:45:33 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/07 17:28:01 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,12 @@ void	free_lst(char **lst)
 	while (lst[idx])
 		free(lst[idx++]);
 	free(lst);
+}
+
+char	**free_arg(int idx, char ***arg)
+{
+	while (--idx >= 0)
+		free((*arg)[idx]);
+	free(*arg);
+	return (0);
 }

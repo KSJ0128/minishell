@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:46:57 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/06 16:12:29 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/07 17:27:53 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ char	**mk_arg(t_process *proc, char *cmd_path)
 		else
 			arg[idx] = ft_strdup(file->data);
 		if (!arg[idx])
-			return (0);
+			return (free_arg(idx, &arg));
 		idx++;
 		file = file->next;
 	}
@@ -139,7 +139,7 @@ void	ft_execve(t_process *proc, char **envp)
 			send_errmsg(cmd, " : is a directory\n", 126);
 		else if (S_ISREG(cmd_stat.st_mode))
 		{
-			if (access("cmd", X_OK) == 0)
+			if (access(cmd, X_OK) == 0)
 				cmd_path = cmd;
 			else
 				send_errmsg(cmd, " : Permission denied\n", 126);
