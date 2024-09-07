@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:33:42 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/06 16:56:18 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/07 14:08:23 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ int		ft_redirect_one(t_redir *redir, t_file *file);
 /* builtin */ // 오류 처리를 어떻게 해야할 지 모르겠음
 int		ft_echo(t_file *file);
 int		ft_pwd(void);
-int		ft_cd(t_file *file);
+int		ft_cd(t_file *file, char ***envp);
 int		ft_export(t_file *file, char ***envp);
 int		ft_env(char **envp);
 int		ft_unset(char ***envp, t_file *file);

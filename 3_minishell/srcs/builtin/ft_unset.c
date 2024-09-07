@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 14:18:12 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/02 19:26:11 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/07 16:14:10 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,14 @@ void	init_val(int *len, int *idx, int *idx2, char **envp)
 	*idx2 = 0;
 }
 
+int	free_tmp(int idx, char ***tmp)
+{
+	while (--idx >= 0)
+		free((*tmp)[idx]);
+	free(*tmp);
+	return (1);
+}
+
 int	ft_unset(char ***envp, t_file *file)
 {
 	char	**tmp;
@@ -51,13 +59,13 @@ int	ft_unset(char ***envp, t_file *file)
 	tmp = (char **)malloc(sizeof(char *) * len);
 	if (!tmp)
 		return (1);
-	while (idx < len)
+	while (idx2 < len)
 	{
 		if (!find_str((*envp)[idx2], file->data))
 		{
 			tmp[idx] = ft_strdup((*envp)[idx2]);
 			if (!tmp[idx++])
-				return (1);
+				return (free_tmp(idx, &tmp));
 		}
 		idx2++;
 	}

@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:49:14 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/06 16:56:36 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/07 14:08:44 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	exec_builtin(t_process *proc, char ***envp)
 	else if (ft_strncmp("pwd", cmd, 4) == 0)
 		stat = ft_pwd();
 	else if (ft_strncmp("cd", cmd, 3) == 0)
-		stat = ft_cd(file);
+		stat = ft_cd(file, envp);
 	else if (ft_strncmp("export", cmd, 7) == 0)
 		stat = ft_export(file, envp);
 	else if (ft_strncmp("env", cmd, 4) == 0)
