@@ -3,10 +3,11 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:32:58 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/05 20:40:54 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/08 00:40:01 by seojkim          ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
@@ -38,7 +39,6 @@ void	setting(t_envi *envi)
 	setting_etc(envi);
 }
 
-// envp변경을 위해서, envp 복사
 char	**copy_envp(char **envp)
 {
 	int		len;

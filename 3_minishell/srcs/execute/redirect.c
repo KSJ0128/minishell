@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:52:18 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/05 19:59:18 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/07 11:06:36 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	push_file_in_heredoc(t_file *file)
 }
 
 // error 처리, $환경변수 처리 -> 이건 파싱부에서 하는 게 좋을 듯
-void	here_doc(char *del, t_file *file)
+void	here_doc(char *del, t_file *file, char **envp)
 {
 	char	*buffer;
 	int		fd;
@@ -58,6 +58,7 @@ void	here_doc(char *del, t_file *file)
 			free(buffer);
 			break ;
 		}
+		expand_heredoc(envp, &buffer);
 		write(fd, buffer, ft_strlen(buffer));
 		free(buffer);
 	}
@@ -90,13 +91,13 @@ void	except_heredoc(t_redir *redir)
 }
 
 // redirect 을 수행해줌
-void	ft_redirect(t_redir *redir, t_file *file)
+void	ft_redirect(t_redir *redir, t_file *file, char **join_envp)
 {
 	while (redir && global_sig == 0)
 	{
 		except_heredoc(redir);
 		if (redir->type == 4)
-			here_doc(redir->data, file);
+			here_doc(redir->data, file, join_envp);
 		redir = redir->next;
 	}
 }

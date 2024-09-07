@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:33:42 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/05 20:40:07 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/08 00:41:30 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,21 +51,18 @@ extern int	global_sig;
 # include "readline.h"
 # include "history.h"
 
-// 프로세스 구조체에 담기 전 토큰 리스트
 typedef struct token
 {
 	char	*data;
 	struct token	*next;
 }	t_token;
 
-// 프로세스 구조체 - 파일 리스트
 typedef struct file
 {
 	void	*next;
 	char	*data;
 }	t_file;
 
-// 프로세스 구조체 - 리다이렉션 리스트
 typedef struct redir
 {
 	void	*next;
@@ -73,7 +70,6 @@ typedef struct redir
 	char	*data;
 }	t_redir;
 
-// 프로세스 구조체
 typedef struct process
 {
 	t_file		*files;
@@ -81,13 +77,12 @@ typedef struct process
 	void		*next;
 }	t_process;
 
-// 로직에 사용할 변수, 설정 관련 구조체
 typedef struct envi
 {
-	t_token	*tokens; // 토큰 리스트
-	t_process	*procs; // 프로세스 구조체 리스트
-	int		quote[2]; // 토큰 분리시 따옴표 체크
-	char	out_quote; // 환경 변수 변환시 외부 따옴표가 무엇인지 체크
+	t_token	*tokens;
+	t_process	*procs;
+	int		quote[2];
+	char	out_quote;
 }	t_envi;
 
 // error.c
@@ -115,13 +110,25 @@ void	quote_compare(t_envi *envi, char *str, char *tmp);
 void	remove_quote(t_envi *envi);
 void	parsing(char **envp, t_envi *envi, char *str);
 
+// parsing_heredoc.c
+void	change_heredoc(char **line, int idx, char *key, char *val);
+void	remove_heredoc(char **line, int idx, char *key);
+char	*can_change_heredoc(char **envp, char *key);
+void	expand_heredoc(char **envp, char **line);
+
+// heredoc_util.c
+char	*get_key(char *str);
+char	*get_value(char *str);
+
 // expand.c
 void	change_var(t_token *token, char *var, int d_idx, int s_idx);
 void	remove_var(t_token *token, int d_idx);
 void	can_change_var(char **envp, t_token *token, char *str, int d_idx);
+void	expand_var(char **envp, t_envi *envi);
+
+// expand_util.c
 int		is_special_var(t_token *now, int idx, char c);
 void	set_out_quote(char quote, t_envi *envi);
-void	expand_var(char **envp, t_envi *envi);
 
 // process.c
 int		redir_check(t_token *token);
@@ -133,6 +140,8 @@ void	make_process(t_envi *envi);
 // main.c
 void	setting_etc(t_envi *envi);
 void	setting(t_envi *envi);
+char	**copy_envp(char **envp);
+int		ck_line(char *line);
 
 /*****************************************************/
 /* execute */
@@ -143,10 +152,10 @@ void	execute(t_envi	*envi, char ***envp);
 void	ft_execve(t_process *proc, char **envp);
 
 // redirect.c
-void	ft_redirect(t_redir *redir, t_file *file);
-void	here_doc(char *del, t_file *file);
+void	ft_redirect(t_redir *redir, t_file *file, char **join_envp);
+void	here_doc(char *del, t_file *file, char **envp);
 int		except_heredoc_one(t_redir *redir);
-int		ft_redirect_one(t_redir *redir, t_file *file);
+int		ft_redirect_one(t_redir *redir, t_file *file, char **envp);
 
 /* builtin */ // 오류 처리를 어떻게 해야할 지 모르겠음
 int		ft_echo(t_file *file);

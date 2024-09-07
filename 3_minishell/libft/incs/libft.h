@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 15:20:53 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/15 16:38:19 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/07 01:52:25 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 void	ft_putstr_fd(char *s, int fd);
 char	**ft_split(char *str, char c);
+int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strndup(const char *s1, int size);
 char	*ft_strdup(const char *s1);

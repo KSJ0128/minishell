@@ -6,13 +6,12 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 17:07:27 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/04 15:08:19 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/07 11:38:22 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// start ~ idx - 1까지의 토큰 추가
 void	add_token(char *line, t_envi *envi, int start, int idx)
 {
 	t_token	*now;
@@ -47,13 +46,13 @@ void	tokenize(char *line, t_envi *envi)
 	idx = 0;
 	while (line[idx] != '\0')
 	{
-		if (line[idx] == '\'' || line[idx] == '\"') // 따옴표 내, 외부 플래그 설정
+		if (line[idx] == '\'' || line[idx] == '\"')
 			is_quote(line[idx], envi);
 		else if (is_deli(line, envi, idx))
 		{
-			if (start < idx) // 구분자 앞에 문자열 존재시 토큰 추가
+			if (start < idx)
 				add_token(line, envi, start, idx);
-			if (check_deli(line, envi, idx, idx)) // 구분자 종류에 따라 인덱스 증가 다르게
+			if (check_deli(line, envi, idx, idx))
 				start = idx + 1;
 			else
 				start = idx + 2;
@@ -62,7 +61,7 @@ void	tokenize(char *line, t_envi *envi)
 		idx++;
 	}
 	if (idx != 0)
-		add_token(line, envi, start, idx); // 널 문자 만났을 때 토큰 추가
+		add_token(line, envi, start, idx);
 }
 
 void	quote_compare(t_envi *envi, char *str, char *tmp)
@@ -74,7 +73,7 @@ void	quote_compare(t_envi *envi, char *str, char *tmp)
 	tmp_idx = 0;
 	while (str[idx] != '\0')
 	{
-		if (str[idx] != '\'' && str[idx] != '\"') // 따옴표 제외하고 새 문자열 생성
+		if (str[idx] != '\'' && str[idx] != '\"')
 			tmp[tmp_idx++] = str[idx];
 		else if (envi->out_quote == '\0')
 			envi->out_quote = str[idx];
@@ -87,10 +86,9 @@ void	quote_compare(t_envi *envi, char *str, char *tmp)
 	tmp[tmp_idx] = '\0';
 }
 
-// 토큰 내 따옴표 제거
 void	remove_quote(t_envi *envi)
 {
-	t_token *now;
+	t_token	*now;
 	char	*str;
 	char	*tmp;
 
@@ -103,7 +101,7 @@ void	remove_quote(t_envi *envi)
 		if (!tmp)
 			handle_error(-1);
 		quote_compare(envi, str, tmp);
-		change_data(now, tmp); // 토큰 데이터 교체
+		change_data(now, tmp);
 		now = now->next;
 	}
 }
@@ -111,10 +109,10 @@ void	remove_quote(t_envi *envi)
 void	parsing(char **envp, t_envi *envi, char *line)
 {
 	setting(envi);
-	if (!check_quote(line, envi)) // 따옴표 쌍 체크
+	if (!check_quote(line, envi))
 		handle_error(1);
-	tokenize(line, envi); // 유저 입력 구분자 기준으로 토크나이즈(화이트 스페이스, |, 리다이렉션)
-	expand_var(envp, envi); // 환경변수 확장
-	remove_quote(envi); // 따옴표 제거
-	make_process(envi); // 프로세스 구조체 리스트 생성
+	tokenize(line, envi);
+	expand_var(envp, envi);
+	remove_quote(envi);
+	make_process(envi);
 }

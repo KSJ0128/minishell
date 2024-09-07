@@ -6,13 +6,12 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 17:17:20 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/18 14:10:12 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/07 11:37:32 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// 따옴표 쌍 확인
 int	check_quote(char *line, t_envi *envi)
 {
 	int	idx;
@@ -31,7 +30,6 @@ int	check_quote(char *line, t_envi *envi)
 	return (SUCCESS);
 }
 
-// 따옴표 내부, 외부 상태 반영
 int	is_quote(char c, t_envi *envi)
 {
 	if (c == '\'' && !(envi->quote[DOUBLE]))
@@ -47,7 +45,6 @@ int	is_quote(char c, t_envi *envi)
 	return (FALSE);
 }
 
-// 구분자인지 확인
 int	is_deli(char *line, t_envi *envi, int idx)
 {
 	if (envi->quote[SINGLE] || envi->quote[DOUBLE])
@@ -60,7 +57,6 @@ int	is_deli(char *line, t_envi *envi, int idx)
 	return (FALSE);
 }
 
-// 어떤 구분자인지 확인 후 구분자 토큰 추가
 int	check_deli(char *line, t_envi *envi, int start, int idx)
 {
 	if ((line[idx] == '<' && line[idx + 1] == '<') || \
