@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   handle_lst.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:22:28 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/08 12:48:57 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 16:49:42 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//  char ** 길이를 재는 함수
 int	ft_lstlen(char **lst)
 {
 	int	len;
@@ -25,7 +24,6 @@ int	ft_lstlen(char **lst)
 	return (len);
 }
 
-// file 길이 구해줌
 int	ft_filelen(t_file *file)
 {
 	int	len;
@@ -39,7 +37,6 @@ int	ft_filelen(t_file *file)
 	return (len);
 }
 
-// process의 길이를 구해줌
 int	proc_len(t_process *proc)
 {
 	int	len;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:33:42 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/08 11:47:27 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 16:53:40 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 # define DELI_REDIR 0
 # define DELI_ETC 1
 
-// 리다이렉션 플래그
 # define REDIR_O 1 // >
 # define REDIR_I 2 // <
 # define REDIR_AO 3 // >>
@@ -32,25 +31,19 @@
 
 # define ERROR_QUOTE 0
 
-# define BUFFER_SIZE 5 // get_next_line
+# define BUFFER_SIZE 5
 
 # include <stdio.h>
 # include "libft.h"
-# include <signal.h> // signal, kill 사용을 웨해 추가
-# include <fcntl.h> // open 함수 사용을 위해 추가
-# include <termios.h> // terminal 설정제어(SIGINT, SIGQUIT)
-# include <sys/ioctl.h> // heredoc_handler
-# include <sys/stat.h> // 파일 폴더 구별위해서 (ft_execute)
-
-//노트북
-// #include "readline/readline.h"
-// #include "readline/history.h"
-
-//클러스터
+# include <signal.h>
+# include <fcntl.h>
+# include <termios.h>
+# include <sys/ioctl.h>
+# include <sys/stat.h>
 # include "readline.h"
 # include "history.h"
 
-extern int	global_sig;
+extern int	g_sig;
 
 typedef struct token
 {
@@ -157,10 +150,10 @@ char	*mk_cmdpath(char *cmd, char *path);
 char	*path_pointer(char **envp);
 
 // redirect.c
-void	ft_redirect(t_redir *redir, t_file *file, char **join_envp);
-void	here_doc(char *del, t_file *file, char **envp);
+void	ft_redirect(t_redir *redir, t_file *file, char **join_envp, int std_in);
+int		here_doc(char *del, t_file *file, char **envp, int std_in);
 int		except_heredoc_one(t_redir *redir);
-int		ft_redirect_one(t_redir *redir, t_file *file, char **envp);
+int		ft_redirect_one(t_redir *redir, t_file *file, char **envp, int std_in);
 
 /* builtin */ // 오류 처리를 어떻게 해야할 지 모르겠음
 int		ft_echo(t_file *file);

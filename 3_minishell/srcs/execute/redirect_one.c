@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:54 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/08 13:59:17 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/08 16:49:16 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,16 +75,16 @@ int	except_heredoc_one(t_redir *redir)
 	return (ans);
 }
 
-int	ft_redirect_one(t_redir *redir, t_file *file, char **envp)
+int	ft_redirect_one(t_redir *redir, t_file *file, char **envp, int std_in)
 {
 	int	stat;
 
 	stat = 0;
-	while (redir && global_sig == 0 && stat == 0)
+	while (redir && g_sig == 0 && stat == 0)
 	{
 		stat = except_heredoc_one(redir);
 		if (redir->type == 4)
-			here_doc(redir->data, file, envp);
+			stat = here_doc(redir->data, file, envp, std_in);
 		redir = redir->next;
 	}
 	return (stat);
