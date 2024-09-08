@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 11:32:07 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/07 11:33:23 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 11:48:17 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,3 @@ char	*get_value(char *str)
 		idx++;
 	return (str + idx + 1);
 }
-

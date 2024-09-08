@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:33:42 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/08 00:41:30 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 11:47:27 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,7 @@
 # include <signal.h> // signal, kill 사용을 웨해 추가
 # include <fcntl.h> // open 함수 사용을 위해 추가
 # include <termios.h> // terminal 설정제어(SIGINT, SIGQUIT)
-#include <sys/ioctl.h> // heredoc_handler
-
-extern int	global_sig;
-
+# include <sys/ioctl.h> // heredoc_handler
 //노트북
 // #include "readline/readline.h"
 // #include "readline/history.h"
@@ -51,9 +48,11 @@ extern int	global_sig;
 # include "readline.h"
 # include "history.h"
 
+extern int	global_sig;
+
 typedef struct token
 {
-	char	*data;
+	char			*data;
 	struct token	*next;
 }	t_token;
 
@@ -79,10 +78,10 @@ typedef struct process
 
 typedef struct envi
 {
-	t_token	*tokens;
+	t_token		*tokens;
 	t_process	*procs;
-	int		quote[2];
-	char	out_quote;
+	int			quote[2];
+	char		out_quote;
 }	t_envi;
 
 // error.c

@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   handle_lst.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:22:28 by seungbel          #+#    #+#             */
-/*   Updated: 2024/08/27 20:45:33 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/08 12:48:57 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "minishell.h"
 
@@ -46,7 +45,7 @@ int	proc_len(t_process *proc)
 	int	len;
 
 	len = 0;
-	while (proc)
+	while (proc && (proc->files || proc->redirs))
 	{
 		len++;
 		proc = proc->next;

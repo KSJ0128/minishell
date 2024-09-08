@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 17:07:27 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/07 11:38:22 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 12:54:43 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ void	remove_quote(t_envi *envi)
 	char	*str;
 	char	*tmp;
 
-
 	now = envi->tokens;
 	while (now != NULL && now->data != NULL)
 	{
@@ -115,4 +114,5 @@ void	parsing(char **envp, t_envi *envi, char *line)
 	expand_var(envp, envi);
 	remove_quote(envi);
 	make_process(envi);
+	free(line);
 }
