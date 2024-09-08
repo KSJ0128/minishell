@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:52:18 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/07 11:06:36 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 14:05:52 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	push_file_in_heredoc(t_file *file)
 	new = (t_file *)malloc(sizeof(t_file));
 	if (!new)
 		send_errmsg_in(NULL, "Malloc error\n", 1);
-	if (global_sig == 0)
+	if (g_global_sig == 0)
 		new->data = ft_strdup(".heredoctmp");
 	else
 	{
@@ -37,7 +37,6 @@ void	push_file_in_heredoc(t_file *file)
 	file->next = new;
 }
 
-// error 처리, $환경변수 처리 -> 이건 파싱부에서 하는 게 좋을 듯
 void	here_doc(char *del, t_file *file, char **envp)
 {
 	char	*buffer;
@@ -49,7 +48,7 @@ void	here_doc(char *del, t_file *file, char **envp)
 	fd = open(".heredoctmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		send_errmsg_in(NULL, "File didn't open. Sorry\n", 1);
-	while (global_sig == 0)
+	while (g_global_sig == 0)
 	{
 		buffer = get_next_line(0);
 		if (!buffer)
@@ -64,7 +63,7 @@ void	here_doc(char *del, t_file *file, char **envp)
 		write(fd, buffer, ft_strlen(buffer));
 		free_str(&buffer);
 	}
-	push_file_in_heredoc(file);
+	return (push_file_in_heredoc(file));
 }
 
 void	except_heredoc(t_redir *redir)
@@ -92,10 +91,9 @@ void	except_heredoc(t_redir *redir)
 	}
 }
 
-// redirect 을 수행해줌
 void	ft_redirect(t_redir *redir, t_file *file, char **join_envp)
 {
-	while (redir && global_sig == 0)
+	while (redir && g_global_sig == 0)
 	{
 		except_heredoc(redir);
 		if (redir->type == 4)

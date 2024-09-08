@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:47:22 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/08 12:44:18 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 14:05:30 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	execute_child(t_process *proc, int (*pipe_fd)[2],
 	}
 	close((*pipe_fd)[0]);
 	ft_redirect(proc->redirs, proc->files, *envp);
-	if (global_sig)
+	if (g_global_sig)
 		return ;
 	if (ck_is_builtin(proc))
 	{
@@ -87,7 +87,7 @@ int	execute_multiple(t_process *proc, char ***envp, int proc_num)
 
 	rem_fd = -1;
 	stat = 0;
-	while (proc && global_sig == 0)
+	while (proc && g_global_sig == 0)
 	{
 		if (pipe(pipe_fd) != 0)
 			return (1);
@@ -129,7 +129,7 @@ void	execute(t_envi	*envi, char ***envp)
 		free_envi(envi);
 		return ;
 	}
-	if (global_sig == SIGINT || global_sig == SIGQUIT)
+	if (g_global_sig == SIGINT || g_global_sig == SIGQUIT)
 		write(1, "\n", 1);
 	free_envi(envi);
 }

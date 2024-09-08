@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 11:37:11 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/08 13:01:16 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/08 14:03:36 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// 환경변수 목록 출력 = 이후는  ""를 붙여서 출력하도록 구현
 static void	print_envp(char *str)
 {
 	int		idx;
@@ -39,7 +38,6 @@ static void	print_envp(char *str)
 	printf("%s\n", str);
 }
 
-// envp 뒤에 하나를 더 추가해서 새로운 envp를 만드는 부분
 static char	**add_envp(char **envp, char *str)
 {
 	int		idx;
@@ -63,7 +61,6 @@ static char	**add_envp(char **envp, char *str)
 	return (new_envp);
 }
 
-// 이름이 같은게 이미 envp에 등록되었는지 판단
 int	find_str(char *en, char *str)
 {
 	int	len;
@@ -76,7 +73,6 @@ int	find_str(char *en, char *str)
 		return (0);
 }
 
-// 이미 등록된 게 존재하면 덧붙이고 return 1, 없으면 그냥 return 0
 int	join_envp(char ***envp, char *str)
 {
 	char	**strlst;
@@ -104,7 +100,6 @@ int	join_envp(char ***envp, char *str)
 	return (idx < len);
 }
 
-// return 에 2개 넣어도 norm에 안 걸리나?
 int	ft_export(t_file *file, char ***envp)
 {
 	char	**new_envp;

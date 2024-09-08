@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:54 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/07 01:55:52 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 14:05:56 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	ft_redirect_one(t_redir *redir, t_file *file, char **envp)
 	int	stat;
 
 	stat = 0;
-	while (redir && global_sig == 0 && stat == 0)
+	while (redir && g_global_sig == 0 && stat == 0)
 	{
 		stat = except_heredoc_one(redir);
 		if (redir->type == 4)

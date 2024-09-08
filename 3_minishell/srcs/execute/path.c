@@ -6,13 +6,12 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:46:57 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/08 11:48:41 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 14:04:02 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// PATH를 가진 str의 주소값을 반환
 char	*path_pointer(char **envp)
 {
 	int		mark;
@@ -27,7 +26,6 @@ char	*path_pointer(char **envp)
 	return (0);
 }
 
-// 유효한 cmd_path만 반환
 char	*mk_cmdpath(char *cmd, char *path)
 {
 	char	*full_path;
@@ -49,7 +47,6 @@ char	*mk_cmdpath(char *cmd, char *path)
 	}
 }
 
-// PATH 경로 중에서 유효한 cmd경로가 있는 경우에만 반환
 char	*find_path(char *cmd, char **envp)
 {
 	char	*path;
@@ -79,7 +76,6 @@ char	*find_path(char *cmd, char **envp)
 	return (0);
 }
 
-// file->data를 모아서 char **arg를 만들어 줌
 char	**mk_arg(t_process *proc, char *cmd_path)
 {
 	t_file	*file;
@@ -108,7 +104,6 @@ char	**mk_arg(t_process *proc, char *cmd_path)
 	return (arg);
 }
 
-// 유효한 path가 있으면 실행 없으면, cmd없다는 메세지 내보내기
 void	ft_execve(t_process *proc, char **envp)
 {
 	char		*cmd;

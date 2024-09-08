@@ -6,15 +6,14 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:32:58 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/08 12:59:35 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 14:06:02 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	global_sig;
+int	g_global_sig;
 
-// 환경 설정 관련 함수, 로직 중간에 또 쓰이는 부분이 있어 따로 빼주었습니다.
 void	setting_etc(t_envi *envi)
 {
 	envi->quote[SINGLE] = 0;
@@ -22,7 +21,6 @@ void	setting_etc(t_envi *envi)
 	envi->out_quote = NULL;
 }
 
-// 환경 설정 관련 함수2
 void	setting(t_envi *envi)
 {
 	envi->tokens = (t_token *)malloc(sizeof(t_token));
@@ -77,51 +75,6 @@ int	ck_line(char *line)
 		return (0);
 	return (1);
 }
-// void	mini_leak(void)
-// {
-// 	system("leaks minishell");
-// }
-
-// 프로세스 구조체 테스트 출력용 함수입니다.
-void print_processes(t_process *proc)
-{
-	int idx;
-
-	idx = 0;
-    while (proc != NULL && (proc->files != NULL || proc->redirs != NULL))
-	{
-		printf("%d번째 프로세스\n", idx);
-
-        // 파일 리스트 출력
-		t_file *file = proc->files;
-		printf("파일:\n");
-		while (file != NULL)
-		{
-			printf("  %s\n", file->data);
-			file = file->next;
-		}
-
-        // 리다이렉션 리스트 출력
-		t_redir *redir = proc->redirs;
-		printf("리다이렉션:\n");
-		while (redir != NULL)
-		{
-            printf("  타입: %d, 데이터: %s\n", redir->type, redir->data);
-            redir = redir->next;
-		}
-
-        // 다음 프로세스로 이동
-		proc = proc->next;
-		idx++;
-	}
-	if (idx == 0)
-		printf("프로세스가 존재하지 않습니다.\n");
-}
-
-void   check_leak(void)
-{
-		system("leaks minishell");
-}
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -129,7 +82,6 @@ int	main(int argc, char **argv, char **envp)
 	char				**envp_cp;
 	t_envi				*envi;
 
-	atexit(check_leak);
 	(void)argv;
 	if (argc != 1)
 		handle_error(0);
@@ -144,7 +96,7 @@ int	main(int argc, char **argv, char **envp)
 		envi = (t_envi *)malloc(sizeof(t_envi));
 		if (!envi)
 			handle_error(-1);
-		if (global_sig == 2)
+		if (g_global_sig == 2)
 			record_exitcode(1, &envp_cp);
 		parsing(envp_cp, envi, line);
 		execute(envi, &envp_cp);
