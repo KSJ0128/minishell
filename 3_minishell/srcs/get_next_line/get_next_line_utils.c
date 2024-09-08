@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seungbel <seungbel@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 21:33:50 by seungbel          #+#    #+#             */
-/*   Updated: 2024/08/27 21:09:34 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/08 18:18:06 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

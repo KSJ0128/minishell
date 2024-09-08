@@ -1,15 +1,8 @@
-MINISHELL = minishell
-
+NAME = minishell
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -MMD
 RM = rm -f
-DBG = -g -fsanitize=address
 
-## 노트북
-# LFLAGS = -L./$(LIBFT_DIR) -lft -L/opt/homebrew/Cellar/readline/8.2.13/lib -lreadline
-# INCLUDES = -I./incs -I./libft/incs -I/opt/homebrew/Cellar/readline/8.2.13/include
-
-## 클러스터
 LFLAGS = -lreadline -L./$(LIBFT_DIR) -lft
 INCLUDES = -I./incs -I./libft/incs -I/usr/local/include/readline
 
@@ -25,12 +18,9 @@ OBJS = $(patsubst $(SRCS_DIR)/%.c,$(OBJS_DIR)/%.o,$(SRCS))
 
 DEPS := $(OBJS:%.o=%.d)
 
-all : $(MINISHELL)
+all : $(NAME)
 
-d : $(SRCS) $(LIBFT)
-	$(CC) $(DBG) -o minishell $^ $(INCLUDES) $(LFLAGS)
-
-$(MINISHELL) : $(OBJS) $(LIBFT)
+$(NAME) : $(OBJS) $(LIBFT)
 	$(CC) -o $@ $^ $(INCLUDES) $(LFLAGS)
 
 $(LIBFT) :

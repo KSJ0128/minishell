@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: seungbel <seungbel@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:52:18 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/08 16:06:00 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 18:17:24 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	here_doc(char *del, t_file *file, char **envp, int std_in)
 	{
 		buffer = get_next_line(std_in);
 		if (!buffer)
-			send_errmsg_in("minishell", " : Malloc error\n", 1);
+			break ;
 		len = ft_strlen(del);
 		if (ft_strncmp(buffer, del, len) == 0 && buffer[len] == '\n')
 		{

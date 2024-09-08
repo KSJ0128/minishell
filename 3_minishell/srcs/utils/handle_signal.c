@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_signal.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: seungbel <seungbel@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 15:54:58 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/08 16:49:16 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/08 18:17:16 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	handle_signal(int sig)
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_redisplay();
+		g_sig = sig;
 	}
 	else if (sig == SIGQUIT)
 	{

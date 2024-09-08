@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seungbel <seungbel@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:20:18 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/07 21:47:55 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/08 18:16:32 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	ft_exit(t_file *file)
 {
-	char	*str;
 	int		num;
 	int		idx;
 
@@ -23,19 +22,20 @@ void	ft_exit(t_file *file)
 		printf("exit\n");
 		exit(0);
 	}
-	str = file->data;
 	idx = 0;
-	if (str[idx] == '-' || str[idx] == '+')
+	if ((file->data)[idx] == '-' || (file->data)[idx] == '+')
 		idx++;
-	while (str[idx])
+	while ((file->data)[idx])
 	{
-		if (!ft_isdigit(str[idx++]))
+		if (!ft_isdigit((file->data)[idx++]))
 		{
-			write(2, str, ft_strlen(str));
+			write(2, (file->data), ft_strlen((file->data)));
 			write(2, " : numeric argument required\n", 29);
 			exit(-1);
 		}
 	}
-	num = ft_atoi(str);
+	if (file->next)
+		send_errmsg("exit", " : too many arguments\n", 1);
+	num = ft_atoi((file->data));
 	exit(num);
 }

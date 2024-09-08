@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: seungbel <seungbel@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:47:22 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/08 14:36:07 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 18:17:11 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,5 @@ void	execute(t_envi	*envi, char ***envp)
 		free_envi(envi);
 		return ;
 	}
-	if (g_sig == SIGINT || g_sig == SIGQUIT)
-		write(1, "\n", 1);
 	free_envi(envi);
 }
