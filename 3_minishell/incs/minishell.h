@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:33:42 by seojkim           #+#    #+#             */
 /*   Updated: 2024/09/08 16:45:31 by seojkim          ###   ########.fr       */
@@ -43,7 +43,7 @@
 # include "readline.h"
 # include "history.h"
 
-extern int	g_global_sig;
+extern int	g_sig;
 
 typedef struct token
 {
@@ -135,10 +135,10 @@ char	*find_path(char *cmd, char **envp);
 char	*mk_cmdpath(char *cmd, char *path);
 char	*path_pointer(char **envp);
 
-void	ft_redirect(t_redir *redir, t_file *file, char **join_envp);
-void	here_doc(char *del, t_file *file, char **envp);
+void	ft_redirect(t_redir *redir, t_file *file, char **join_envp, int std_in);
+int		here_doc(char *del, t_file *file, char **envp, int std_in);
 int		except_heredoc_one(t_redir *redir);
-int		ft_redirect_one(t_redir *redir, t_file *file, char **envp);
+int		ft_redirect_one(t_redir *redir, t_file *file, char **envp, int std_in);
 
 int		ft_echo(t_file *file);
 int		ft_pwd(void);

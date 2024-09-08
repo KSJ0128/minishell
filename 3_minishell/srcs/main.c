@@ -6,13 +6,13 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:32:58 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/08 16:46:12 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 16:50:10 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	g_global_sig;
+int	g_sig;
 
 void	setting_etc(t_envi *envi)
 {
@@ -102,7 +102,7 @@ int	main(int argc, char **argv, char **envp)
 		envi = (t_envi *)malloc(sizeof(t_envi));
 		if (!envi)
 			handle_error(-1);
-		if (g_global_sig == 2)
+		if (g_sig == 2)
 			record_exitcode(1, &envp_cp);
 		parsing(envp_cp, envi, line);
 		execute(envi, &envp_cp);

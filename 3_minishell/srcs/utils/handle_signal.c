@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 15:54:58 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/08 14:06:11 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 16:49:16 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,21 +30,21 @@ void	handle_signal(int sig)
 
 void	handle_signal2(int sig)
 {
-	g_global_sig = sig;
+	g_sig = sig;
 	if (sig == SIGINT)
 		ioctl(STDIN_FILENO, TIOCSTI, "\n");
 }
 
 void	handle_signal3(int sig)
 {
-	g_global_sig = sig;
+	g_sig = sig;
 }
 
 void	init_sig_termi(void)
 {
 	struct termios	term;
 
-	g_global_sig = 0;
+	g_sig = 0;
 	tcgetattr(STDOUT_FILENO, &term);
 	term.c_lflag &= ~ECHOCTL;
 	tcsetattr(STDOUT_FILENO, TCSANOW, &term);

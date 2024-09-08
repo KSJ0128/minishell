@@ -75,16 +75,16 @@ int	except_heredoc_one(t_redir *redir)
 	return (ans);
 }
 
-int	ft_redirect_one(t_redir *redir, t_file *file, char **envp)
+int	ft_redirect_one(t_redir *redir, t_file *file, char **envp, int std_in)
 {
 	int	stat;
 
 	stat = 0;
-	while (redir && g_global_sig == 0 && stat == 0)
+	while (redir && g_sig == 0 && stat == 0)
 	{
 		stat = except_heredoc_one(redir);
 		if (redir->type == 4)
-			here_doc(redir->data, file, envp);
+			stat = here_doc(redir->data, file, envp, std_in);
 		redir = redir->next;
 	}
 	return (stat);

@@ -12,17 +12,17 @@
 
 #include "minishell.h"
 
-void	push_file_in_heredoc(t_file *file)
+int	push_file_in_heredoc(t_file *file)
 {
 	t_file	*new;
 	int		fd;
 
 	if (!file)
-		return ;
+		return (-1);
 	new = (t_file *)malloc(sizeof(t_file));
 	if (!new)
-		send_errmsg_in(NULL, "Malloc error\n", 1);
-	if (g_global_sig == 0)
+		send_errmsg_in("minishell", " : Malloc error\n", 1);
+	if (g_sig == 0)
 		new->data = ft_strdup(".heredoctmp");
 	else
 	{
@@ -32,14 +32,15 @@ void	push_file_in_heredoc(t_file *file)
 		close(fd);
 	}
 	if (!new->data)
-		send_errmsg_in("minishell", "Malloc error\n", 1);
+		send_errmsg_in("minishell", " : Malloc error\n", 1);
 	new->next = NULL;
 	while (file->next)
 		file = file->next;
 	file->next = new;
+	return (0);
 }
 
-void	here_doc(char *del, t_file *file, char **envp)
+int	here_doc(char *del, t_file *file, char **envp, int std_in)
 {
 	char	*buffer;
 	int		fd;
@@ -49,12 +50,12 @@ void	here_doc(char *del, t_file *file, char **envp)
 	signal(SIGQUIT, handle_signal2);
 	fd = open(".heredoctmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
-		send_errmsg_in("minishell", "File didn't open. Sorry\n", 1);
-	while (g_global_sig == 0)
+		send_errmsg_in("minishell", " : File didn't open. Sorry\n", 1);
+	while (g_sig == 0)
 	{
-		buffer = get_next_line(0);
+		buffer = get_next_line(std_in);
 		if (!buffer)
-			send_errmsg_in("minishell", "Malloc error\n", 1);
+			send_errmsg_in("minishell", " : Malloc error\n", 1);
 		len = ft_strlen(del);
 		if (ft_strncmp(buffer, del, len) == 0 && buffer[len] == '\n')
 		{
@@ -80,7 +81,8 @@ void	except_heredoc(t_redir *redir)
 			fd = open(redir->data, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd == -1)
 			send_errmsg(redir->data, ": No such file or directory\n", 1);
-		dup2(fd, 1);
+		if (dup2(fd, 1) == -1)
+			send_errmsg("minishell", " : failed to duplicate fd\n", 1);
 		close(fd);
 	}
 	else if (redir->type == 2)
@@ -88,18 +90,19 @@ void	except_heredoc(t_redir *redir)
 		fd = open(redir->data, O_RDONLY);
 		if (fd == -1)
 			send_errmsg(redir->data, ": No such file or directory\n", 1);
-		dup2(fd, 0);
+		if (dup2(fd, 0) == -1)
+			send_errmsg("minishell", " : failed to duplicate fd\n", 1);
 		close(fd);
 	}
 }
 
-void	ft_redirect(t_redir *redir, t_file *file, char **join_envp)
+void	ft_redirect(t_redir *redir, t_file *file, char **join_envp, int std_in)
 {
-	while (redir && g_global_sig == 0)
+	while (redir && g_sig == 0)
 	{
 		except_heredoc(redir);
 		if (redir->type == 4)
-			here_doc(redir->data, file, join_envp);
+			here_doc(redir->data, file, join_envp, std_in);
 		redir = redir->next;
 	}
 }
