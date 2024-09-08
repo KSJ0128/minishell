@@ -77,6 +77,10 @@ int	ck_line(char *line)
 		return (0);
 	return (1);
 }
+// void	mini_leak(void)
+// {
+// 	system("leaks minishell");
+// }
 
 // 프로세스 구조체 테스트 출력용 함수입니다.
 void print_processes(t_process *proc)
@@ -144,7 +148,7 @@ int	main(int argc, char **argv, char **envp)
 			record_exitcode(1, &envp_cp);
 		parsing(envp_cp, envi, line);
 		execute(envi, &envp_cp);
-		free_envi(envi);
 	}
+	free_lst(&envp_cp);
 	return (0);
 }

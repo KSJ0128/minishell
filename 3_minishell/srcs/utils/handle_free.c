@@ -1,41 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_exit.c                                          :+:      :+:    :+:   */
+/*   handle_free.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/23 12:20:18 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/07 21:47:55 by seungbel         ###   ########.fr       */
+/*   Created: 2024/09/08 12:41:10 by seungbel          #+#    #+#             */
+/*   Updated: 2024/09/08 12:55:10 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_exit(t_file *file)
+void	free_str(char **str)
 {
-	char	*str;
-	int		num;
-	int		idx;
+	free(*str);
+	*str = NULL;
+}
 
-	if (!file)
-	{
-		printf("exit\n");
-		exit(0);
-	}
-	str = file->data;
+void	free_lst(char ***lst)
+{
+	int	idx;
+
 	idx = 0;
-	if (str[idx] == '-' || str[idx] == '+')
-		idx++;
-	while (str[idx])
+	while ((*lst)[idx])
 	{
-		if (!ft_isdigit(str[idx++]))
-		{
-			write(2, str, ft_strlen(str));
-			write(2, " : numeric argument required\n", 29);
-			exit(-1);
-		}
+		free((*lst)[idx]);
+		(*lst)[idx] = NULL;
+		idx++;
 	}
-	num = ft_atoi(str);
-	exit(num);
+	free(*lst);
+	*lst = NULL;
+}
+
+void	free_arg(int idx, char ***arg)
+{
+	while (--idx >= 0)
+		free((*arg)[idx]);
+	free(*arg);
+	*arg = NULL;
+	send_errmsg(NULL, " : Malloc Error\n", 1);
 }

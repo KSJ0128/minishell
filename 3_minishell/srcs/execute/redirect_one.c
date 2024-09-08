@@ -26,7 +26,7 @@ int	except_heredoc_type1(int type, char *data)
 		{
 			data = ft_strdup("minishell");
 			write(2, data, ft_strlen(data));
-			free(data);
+			free_str(&data);
 		}
 		else
 			write(2, data, ft_strlen(data));
@@ -49,7 +49,7 @@ int	except_heredoc_type2(char *data)
 		{
 			data = ft_strdup("minishell");
 			write(2, data, ft_strlen(data));
-			free(data);
+			free_str(&data);
 		}
 		else
 			write(2, data, ft_strlen(data));

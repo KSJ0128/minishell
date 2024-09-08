@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 15:54:58 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/05 20:13:41 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/07 22:37:16 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	handle_signal(int sig)
 {
-	global_sig = sig;
 	if (sig == SIGINT)
 	{
 		rl_replace_line("", 0);

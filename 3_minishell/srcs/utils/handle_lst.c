@@ -52,14 +52,3 @@ int	proc_len(t_process *proc)
 	}
 	return (len);
 }
-
-// char **lst를 완전히 free해주는 함수
-void	free_lst(char **lst)
-{
-	int	idx;
-
-	idx = 0;
-	while (lst[idx])
-		free(lst[idx++]);
-	free(lst);
-}

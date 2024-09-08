@@ -126,8 +126,10 @@ void	execute(t_envi	*envi, char ***envp)
 	if (access(".heredoctmp", F_OK) == 0)
 	{
 		unlink(".heredoctmp");
+		free_envi(envi);
 		return ;
 	}
 	if (global_sig == SIGINT || global_sig == SIGQUIT)
 		write(1, "\n", 1);
+	free_envi(envi);
 }

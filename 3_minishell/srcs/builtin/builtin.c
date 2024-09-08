@@ -51,7 +51,7 @@ int	exec_builtin(t_process *proc, char ***envp)
 	else if (ft_strncmp("pwd", cmd, 4) == 0)
 		stat = ft_pwd();
 	else if (ft_strncmp("cd", cmd, 3) == 0)
-		stat = ft_cd(file);
+		stat = ft_cd(file, envp);
 	else if (ft_strncmp("export", cmd, 7) == 0)
 		stat = ft_export(file, envp);
 	else if (ft_strncmp("env", cmd, 4) == 0)

@@ -40,6 +40,8 @@
 # include <fcntl.h> // open 함수 사용을 위해 추가
 # include <termios.h> // terminal 설정제어(SIGINT, SIGQUIT)
 # include <sys/ioctl.h> // heredoc_handler
+# include <sys/stat.h> // 파일 폴더 구별위해서 (ft_execute)
+
 //노트북
 // #include "readline/readline.h"
 // #include "readline/history.h"
@@ -86,8 +88,8 @@ typedef struct envi
 
 // error.c
 void	handle_error(int num);
-void	send_errmsg(char *cmd, int exitcode);
-int		send_errmsg_export(char *cmd, int code);
+void	send_errmsg(char *cmd, char *msg, int exitcode);
+int		send_errmsg_in(char *cmd, char *msg, int code);
 
 // free.c
 void	change_data(t_token *token, char *str);
@@ -149,6 +151,10 @@ void	execute(t_envi	*envi, char ***envp);
 
 // path.c
 void	ft_execve(t_process *proc, char **envp);
+char	**mk_arg(t_process *proc, char *cmd_path);
+char	*find_path(char *cmd, char **envp);
+char	*mk_cmdpath(char *cmd, char *path);
+char	*path_pointer(char **envp);
 
 // redirect.c
 void	ft_redirect(t_redir *redir, t_file *file, char **join_envp);
@@ -159,11 +165,11 @@ int		ft_redirect_one(t_redir *redir, t_file *file, char **envp);
 /* builtin */ // 오류 처리를 어떻게 해야할 지 모르겠음
 int		ft_echo(t_file *file);
 int		ft_pwd(void);
-int		ft_cd(t_file *file);
+int		ft_cd(t_file *file, char ***envp);
 int		ft_export(t_file *file, char ***envp);
 int		ft_env(char **envp);
 int		ft_unset(char ***envp, t_file *file);
-void	ft_exit(t_file *file); // 진짜 끝내는 거니까 상관없지 않나?
+void	ft_exit(t_file *file);
 
 // builtin.c
 int		ck_is_builtin(t_process *proc);
@@ -176,10 +182,8 @@ int		join_envp(char ***envp, char *str);
 
 // handle_lst.c
 int		ft_lstlen(char **lst);
-void	free_lst(char **lst);
 int		proc_len(t_process *proc);
 int		ft_filelen(t_file *file);
-char	**mk_arg(t_process *proc, char *cmd_path);
 
 // handle_signal.c
 void	handle_signal(int sig);
@@ -191,6 +195,11 @@ void	reset_sig_termi(void);
 // handle_fd.c
 void	dup_all(int (*dup_fd)[3]);
 int		dup2_all(int (*dup_fd)[3], int stat);
+
+// handle_free.c
+void	free_str(char **str);
+void	free_lst(char ***lst);
+void	free_arg(int idx, char ***arg);
 
 /* get_next_line */
 // get_next_line.c

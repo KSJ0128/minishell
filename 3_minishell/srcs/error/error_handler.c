@@ -23,30 +23,32 @@ void	handle_error(int num)
 	exit(1);
 }
 
-void	send_errmsg(char *cmd, int exitcode)
+void	send_errmsg(char *cmd, char *msg, int exitcode)
 {
 	if (!cmd)
 	{
 		cmd = ft_strdup("minishell");
 		write(2, cmd, ft_strlen(cmd));
 		free(cmd);
+		cmd = NULL;
 	}
 	else
 		write(2, cmd, ft_strlen(cmd));
-	perror(" ");
+	write(2, msg, ft_strlen(msg));
 	exit(exitcode);
 }
 
-int	send_errmsg_export(char *cmd, int code)
+int	send_errmsg_in(char *cmd, char *msg, int code)
 {
 	if (!cmd)
 	{
 		cmd = ft_strdup("minishell");
 		write(2, cmd, ft_strlen(cmd));
 		free(cmd);
+		cmd = NULL;
 	}
 	else
 		write(2, cmd, ft_strlen(cmd));
-	write(2, " : not a valid identifier\n", 27);
+	write(2, msg, ft_strlen(msg));
 	return (code);
 }

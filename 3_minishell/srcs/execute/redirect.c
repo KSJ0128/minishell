@@ -19,7 +19,7 @@ void	push_file_in_heredoc(t_file *file)
 
 	new = (t_file *)malloc(sizeof(t_file));
 	if (!new)
-		return ;
+		send_errmsg_in(NULL, "Malloc error\n", 1);
 	if (global_sig == 0)
 		new->data = ft_strdup(".heredoctmp");
 	else
@@ -30,7 +30,7 @@ void	push_file_in_heredoc(t_file *file)
 		close(fd);
 	}
 	if (!new->data)
-		return ;
+		send_errmsg_in(NULL, "Malloc error\n", 1);
 	new->next = NULL;
 	while (file->next)
 		file = file->next;
@@ -42,25 +42,27 @@ void	here_doc(char *del, t_file *file, char **envp)
 {
 	char	*buffer;
 	int		fd;
+	int		len;
 
 	signal(SIGINT, handle_signal2);
 	signal(SIGQUIT, handle_signal2);
 	fd = open(".heredoctmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
-		return ;
+		send_errmsg_in(NULL, "File didn't open. Sorry\n", 1);
 	while (global_sig == 0)
 	{
 		buffer = get_next_line(0);
 		if (!buffer)
-			return ;
-		if (ft_strncmp(buffer, del, ft_strlen(del)) == 0)
+			send_errmsg_in(NULL, "Malloc error\n", 1);
+		len = ft_strlen(del);
+		if (ft_strncmp(buffer, del, len) == 0 && buffer[len] == '\n')
 		{
-			free(buffer);
+			free_str(&buffer);
 			break ;
 		}
 		expand_heredoc(envp, &buffer);
 		write(fd, buffer, ft_strlen(buffer));
-		free(buffer);
+		free_str(&buffer);
 	}
 	push_file_in_heredoc(file);
 }
@@ -76,7 +78,7 @@ void	except_heredoc(t_redir *redir)
 		else
 			fd = open(redir->data, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd == -1)
-			send_errmsg(redir->data, 1);
+			send_errmsg(redir->data, ": No such file or directory\n", 1);
 		dup2(fd, 1);
 		close(fd);
 	}
@@ -84,7 +86,7 @@ void	except_heredoc(t_redir *redir)
 	{
 		fd = open(redir->data, O_RDONLY);
 		if (fd == -1)
-			send_errmsg(redir->data, 1);
+			send_errmsg(redir->data, ": No such file or directory\n", 1);
 		dup2(fd, 0);
 		close(fd);
 	}
