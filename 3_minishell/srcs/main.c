@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:32:58 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/08 12:59:35 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 13:15:06 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,6 @@ int	ck_line(char *line)
 		return (0);
 	return (1);
 }
-// void	mini_leak(void)
-// {
-// 	system("leaks minishell");
-// }
 
 // 프로세스 구조체 테스트 출력용 함수입니다.
 void print_processes(t_process *proc)
@@ -118,18 +114,12 @@ void print_processes(t_process *proc)
 		printf("프로세스가 존재하지 않습니다.\n");
 }
 
-void   check_leak(void)
-{
-		system("leaks minishell");
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	char				*line;
 	char				**envp_cp;
 	t_envi				*envi;
 
-	atexit(check_leak);
 	(void)argv;
 	if (argc != 1)
 		handle_error(0);

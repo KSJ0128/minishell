@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 12:41:10 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/08 12:55:10 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/08 13:14:08 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,5 @@ void	free_arg(int idx, char ***arg)
 		free((*arg)[idx]);
 	free(*arg);
 	*arg = NULL;
-	send_errmsg(NULL, " : Malloc Error\n", 1);
+	send_errmsg("minishell", " : Malloc Error\n", 1);
 }

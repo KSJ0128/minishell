@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:52:18 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/07 11:06:36 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 13:57:33 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,11 @@ void	push_file_in_heredoc(t_file *file)
 	t_file	*new;
 	int		fd;
 
+	if (!file)
+		return ;
 	new = (t_file *)malloc(sizeof(t_file));
 	if (!new)
-		send_errmsg_in(NULL, "Malloc error\n", 1);
+		send_errmsg_in("minishell", "Malloc error\n", 1);
 	if (global_sig == 0)
 		new->data = ft_strdup(".heredoctmp");
 	else
@@ -30,7 +32,7 @@ void	push_file_in_heredoc(t_file *file)
 		close(fd);
 	}
 	if (!new->data)
-		send_errmsg_in(NULL, "Malloc error\n", 1);
+		send_errmsg_in("minishell", "Malloc error\n", 1);
 	new->next = NULL;
 	while (file->next)
 		file = file->next;
@@ -48,12 +50,12 @@ void	here_doc(char *del, t_file *file, char **envp)
 	signal(SIGQUIT, handle_signal2);
 	fd = open(".heredoctmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
-		send_errmsg_in(NULL, "File didn't open. Sorry\n", 1);
+		send_errmsg_in("minishell", "File didn't open. Sorry\n", 1);
 	while (global_sig == 0)
 	{
 		buffer = get_next_line(0);
 		if (!buffer)
-			send_errmsg_in(NULL, "Malloc error\n", 1);
+			send_errmsg_in("minishell", "Malloc error\n", 1);
 		len = ft_strlen(del);
 		if (ft_strncmp(buffer, del, len) == 0 && buffer[len] == '\n')
 		{

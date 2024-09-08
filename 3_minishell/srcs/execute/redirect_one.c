@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_one.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:54 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/07 01:55:52 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 13:59:17 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int	except_heredoc_type1(int type, char *data)
 		{
 			data = ft_strdup("minishell");
 			write(2, data, ft_strlen(data));
-			free_str(&data);
+			free(data);
+			data = NULL;
 		}
 		else
 			write(2, data, ft_strlen(data));
@@ -49,7 +50,8 @@ int	except_heredoc_type2(char *data)
 		{
 			data = ft_strdup("minishell");
 			write(2, data, ft_strlen(data));
-			free_str(&data);
+			free(data);
+			data = NULL;
 		}
 		else
 			write(2, data, ft_strlen(data));
