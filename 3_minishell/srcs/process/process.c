@@ -6,13 +6,12 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 14:13:47 by seojkim           #+#    #+#             */
-/*   Updated: 2024/08/24 15:37:56 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 00:35:11 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// 리다이렉션 플래그 체크
 int	redir_check(t_token *token)
 {
 	if (ft_strncmp(token->data, ">", ft_strlen(token->data)) == 0)
@@ -26,12 +25,11 @@ int	redir_check(t_token *token)
 	return (FALSE);
 }
 
-// 파일 리스트에 파일 추가
 void	push_file(t_token *token, t_process *proc)
 {
-	t_process *now;
-	t_file *last;
-	t_file *file;
+	t_process	*now;
+	t_file		*last;
+	t_file		*file;
 
 	file = (t_file *)malloc(sizeof(t_file));
 	if (!file)
@@ -52,12 +50,10 @@ void	push_file(t_token *token, t_process *proc)
 	}
 }
 
-// 리다이렉션 리스트에 리다이렉션 추가
 void	push_redir(t_token *token, t_process *proc)
 {
-	t_process *now;
-	t_redir *redir;
-	t_redir *last;
+	t_process	*now;
+	t_redir		*redir;
 
 	redir = (t_redir *)malloc(sizeof(t_redir));
 	if (!redir)
@@ -72,22 +68,20 @@ void	push_redir(t_token *token, t_process *proc)
 	now = proc;
 	while (now->next != NULL)
 		now = now->next;
-	last = now->redirs;
-	if (last == NULL)
+	if (now->redirs == NULL)
 		now->redirs = redir;
 	else
 	{
-		while (last->next != NULL)
-			last = last->next;
-		last->next = redir;
+		while (now->redirs->next != NULL)
+			now->redirs = now->redirs->next;
+		now->redirs->next = redir;
 	}
 }
 
-// 프로세스 리스트에 프로세스 추가
 void	push_proc(t_process *proc)
 {
-	t_process *now;
-	t_process *new;
+	t_process	*now;
+	t_process	*new;
 
 	now = proc;
 	new = (t_process *)malloc(sizeof(t_process));
@@ -102,7 +96,6 @@ void	push_proc(t_process *proc)
 	now = now->next;
 }
 
-// 프로세스 구조체 리스트 생성
 void	make_process(t_envi *envi)
 {
 	t_token		*now;

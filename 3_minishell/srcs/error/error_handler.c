@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 15:18:59 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/08 12:58:31 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/07 11:35:32 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	handle_error(int num)
 		printf("Error : Invalid arguments.\n");
 	else if (num == 1)
 		printf("Error : Invalid quotes.\n");
-	exit (0); // error 후에 0으로 exit 해도 되는지
+	exit(1);
 }
 
 void	send_errmsg(char *cmd, char *msg, int exitcode)

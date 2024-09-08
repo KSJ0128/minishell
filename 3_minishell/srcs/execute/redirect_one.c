@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_one.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:54 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/08 13:01:16 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/07 01:55:52 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	except_heredoc_one(t_redir *redir)
 	return (ans);
 }
 
-int	ft_redirect_one(t_redir *redir, t_file *file)
+int	ft_redirect_one(t_redir *redir, t_file *file, char **envp)
 {
 	int	stat;
 
@@ -82,7 +82,7 @@ int	ft_redirect_one(t_redir *redir, t_file *file)
 	{
 		stat = except_heredoc_one(redir);
 		if (redir->type == 4)
-			here_doc(redir->data, file);
+			here_doc(redir->data, file, envp);
 		redir = redir->next;
 	}
 	return (stat);

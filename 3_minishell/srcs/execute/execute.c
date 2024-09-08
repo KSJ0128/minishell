@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:47:22 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/07 22:35:10 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/08 12:44:18 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	execute_single(t_process *proc, char ***envp)
 	pid_t		pid;
 
 	dup_all(&dup_fd);
-	stat = ft_redirect_one(proc->redirs, proc->files);
+	stat = ft_redirect_one(proc->redirs, proc->files, *envp);
 	if (stat)
 		return (dup2_all(&dup_fd, stat));
 	if (ck_is_builtin(proc))
@@ -55,7 +55,7 @@ void	execute_child(t_process *proc, int (*pipe_fd)[2],
 		close(*rem_fd);
 	}
 	close((*pipe_fd)[0]);
-	ft_redirect(proc->redirs, proc->files);
+	ft_redirect(proc->redirs, proc->files, *envp);
 	if (global_sig)
 		return ;
 	if (ck_is_builtin(proc))
