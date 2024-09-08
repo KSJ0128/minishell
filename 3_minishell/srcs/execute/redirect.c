@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:52:18 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/08 14:05:52 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 14:35:51 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	push_file_in_heredoc(t_file *file)
 	t_file	*new;
 	int		fd;
 
+	if (!file)
+		return ;
 	new = (t_file *)malloc(sizeof(t_file));
 	if (!new)
 		send_errmsg_in(NULL, "Malloc error\n", 1);
@@ -30,7 +32,7 @@ void	push_file_in_heredoc(t_file *file)
 		close(fd);
 	}
 	if (!new->data)
-		send_errmsg_in(NULL, "Malloc error\n", 1);
+		send_errmsg_in("minishell", "Malloc error\n", 1);
 	new->next = NULL;
 	while (file->next)
 		file = file->next;
@@ -47,12 +49,17 @@ void	here_doc(char *del, t_file *file, char **envp)
 	signal(SIGQUIT, handle_signal2);
 	fd = open(".heredoctmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
+<<<<<<< HEAD
 		send_errmsg_in(NULL, "File didn't open. Sorry\n", 1);
 	while (g_global_sig == 0)
+=======
+		send_errmsg_in("minishell", "File didn't open. Sorry\n", 1);
+	while (global_sig == 0)
+>>>>>>> 9db6e4efa005f99b0fd49b6903a9e82f3b239cf6
 	{
 		buffer = get_next_line(0);
 		if (!buffer)
-			send_errmsg_in(NULL, "Malloc error\n", 1);
+			send_errmsg_in("minishell", "Malloc error\n", 1);
 		len = ft_strlen(del);
 		if (ft_strncmp(buffer, del, len) == 0 && buffer[len] == '\n')
 		{

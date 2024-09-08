@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 11:10:21 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/08 13:01:16 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/08 13:14:07 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	ft_cd(t_file *file, char ***envp)
 			return (send_errmsg_in(path, ": Permission denied\n", 1));
 		else
 			if (!change_pwds(envp))
-				return (send_errmsg_in(NULL, "Malloc error\n", 1));
+				return (send_errmsg_in("minishell", "Malloc error\n", 1));
 	}
 	else if (ck_is_directory(path) == 0)
 		return (send_errmsg_in(path, ": Not a directory\n", 1));

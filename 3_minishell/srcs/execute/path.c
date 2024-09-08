@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:46:57 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/08 14:04:02 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 14:35:59 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,11 @@ char	*mk_cmdpath(char *cmd, char *path)
 
 	full_path = ft_strjoin(path, "/");
 	if (!full_path)
-		send_errmsg(NULL, " : Malloc Error\n", 1);
+		send_errmsg("minishell", " : Malloc Error\n", 1);
 	cmd_path = ft_strjoin(full_path, cmd);
 	free_str(&full_path);
 	if (!cmd_path)
-		send_errmsg(NULL, " : Malloc Error\n", 1);
+		send_errmsg("minishell", " : Malloc Error\n", 1);
 	if (access(cmd_path, F_OK | X_OK) == 0)
 		return (cmd_path);
 	else
@@ -58,9 +58,8 @@ char	*find_path(char *cmd, char **envp)
 	if (!path)
 		return (0);
 	pathlst = ft_split(path, ':');
-	free_str(&path);
 	if (!pathlst)
-		send_errmsg(NULL, " : Malloc Error\n", 1);
+		send_errmsg("minishell", " : Malloc Error\n", 1);
 	idx = 0;
 	while (pathlst[idx])
 	{
@@ -87,7 +86,7 @@ char	**mk_arg(t_process *proc, char *cmd_path)
 	file_len = ft_filelen(file);
 	arg = (char **)malloc(sizeof(char *) * (file_len + 1));
 	if (!arg)
-		send_errmsg(NULL, " : Malloc Error\n", 1);
+		send_errmsg("minishell", " : Malloc Error\n", 1);
 	idx = 0;
 	while (file)
 	{

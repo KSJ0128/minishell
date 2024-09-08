@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:54 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/08 14:05:56 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 14:35:33 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int	except_heredoc_type1(int type, char *data)
 		{
 			data = ft_strdup("minishell");
 			write(2, data, ft_strlen(data));
-			free_str(&data);
+			free(data);
+			data = NULL;
 		}
 		else
 			write(2, data, ft_strlen(data));
@@ -49,7 +50,8 @@ int	except_heredoc_type2(char *data)
 		{
 			data = ft_strdup("minishell");
 			write(2, data, ft_strlen(data));
-			free_str(&data);
+			free(data);
+			data = NULL;
 		}
 		else
 			write(2, data, ft_strlen(data));
