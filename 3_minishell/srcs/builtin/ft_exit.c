@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:20:18 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/05 18:05:38 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/07 21:47:55 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,5 @@ void	ft_exit(t_file *file)
 		}
 	}
 	num = ft_atoi(str);
-	printf("exit %d\n", num);
 	exit(num);
 }

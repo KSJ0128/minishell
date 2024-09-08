@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 11:37:11 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/05 20:40:27 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/08 13:01:16 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,16 @@ static void	print_envp(char *str)
 			strlst = ft_split(str, '=');
 			if (!strlst)
 				handle_error(-1);
-			printf("declare -x %s=", strlst[0]);
+			printf("%s=", strlst[0]);
 			idx2 = 1;
 			while (strlst[idx2])
-			{
-				printf("\"%s", strlst[idx2]);
-				free(strlst[idx2++]);
-			}
-			free(strlst);
+				printf("\"%s", strlst[idx2++]);
+			free_lst(&strlst);
 			printf("\"\n");
 			return ;
 		}
 	}
-	printf("declare -x %s\n", str);
+	printf("%s\n", str);
 }
 
 // envp 뒤에 하나를 더 추가해서 새로운 envp를 만드는 부분
@@ -95,7 +92,7 @@ int	join_envp(char ***envp, char *str)
 	{
 		if (find_str((*envp)[idx], strlst[0]) && strlst[1])
 		{
-			free((*envp)[idx]);
+			free_str(&(*envp)[idx]);
 			(*envp)[idx] = ft_strdup(str);
 			if (!(*envp)[idx])
 				handle_error(-1);
@@ -103,7 +100,7 @@ int	join_envp(char ***envp, char *str)
 		}
 		idx++;
 	}
-	free_lst(strlst);
+	free_lst(&strlst);
 	return (idx < len);
 }
 
@@ -125,13 +122,13 @@ int	ft_export(t_file *file, char ***envp)
 		return (0);
 	}
 	if (!ck_export_valid(file->data))
-		return (send_errmsg_export(file->data, 1));
+		return (send_errmsg_in(file->data, ": No such file or directory\n", 1));
 	else
 	{
 		if (join_envp(envp, file->data))
 			return (0);
 		new_envp = add_envp(*envp, file->data);
-		free_lst(*envp);
+		free_lst(envp);
 		*envp = new_envp;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 17:43:31 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/05 14:28:40 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/08 13:01:16 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,6 @@ void	record_exitcode(int code, char ***envp)
 	code_str = ft_itoa(code);
 	ans = ft_strjoin("?=", code_str);
 	join_envp(envp, ans);
-	free(code_str);
-	free(ans);
+	free_str(&code_str);
+	free_str(&ans);
 }
