@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 01:49:32 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/07 11:33:41 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 16:20:55 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ void	expand_heredoc(char **envp, char **line)
 			else if (key && value)
 				change_heredoc(line, idx, key, value);
 			str = *line;
+			if (key && ft_strcmp(key, "$") == 0)
+				free(value);
 		}
 		idx++;
 	}

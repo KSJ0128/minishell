@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:49:51 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/08 12:38:51 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/08 14:03:21 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// 뒤에 명령어는 그냥 무시하도록 구현했는데, 그렇게 해도 될런지
 int	ft_env(char **envp)
 {
 	int		idx;

@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 11:41:14 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/07 11:41:53 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 16:14:45 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,13 @@
 
 int	is_special_var(t_token *now, int idx, char c)
 {
+	char	*pid;
+
 	if (c == '$')
 	{
-		change_var(now, ft_itoa(getpid()), idx, idx + 2);
+		pid = ft_itoa(getpid());
+		change_var(now, pid, idx, idx + 2);
+		free(pid);
 		return (TRUE);
 	}
 	else if (c == '0')

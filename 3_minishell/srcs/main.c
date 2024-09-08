@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:32:58 by seojkim           #+#    #+#             */
 /*   Updated: 2024/09/08 16:50:10 by seungbel         ###   ########.fr       */
@@ -76,12 +76,18 @@ int	ck_line(char *line)
 	return (1);
 }
 
+void foo(void)
+{
+	system("leaks minishell");
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char				*line;
 	char				**envp_cp;
 	t_envi				*envi;
 
+	atexit(foo);
 	(void)argv;
 	if (argc != 1)
 		handle_error(0);

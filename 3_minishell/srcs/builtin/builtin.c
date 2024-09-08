@@ -6,13 +6,12 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:49:14 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/08 12:43:22 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 14:03:08 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// builtin 명령어인지 체크
 int	ck_is_builtin(t_process *proc)
 {
 	char	*cmd;
@@ -36,7 +35,6 @@ int	ck_is_builtin(t_process *proc)
 		return (0);
 }
 
-// bulitin 명령어 실행
 int	exec_builtin(t_process *proc, char ***envp)
 {
 	char	*cmd;
@@ -65,7 +63,6 @@ int	exec_builtin(t_process *proc, char ***envp)
 	return (stat);
 }
 
-// export 함수의 validation 체크 부분
 int	ck_export_valid(char *name)
 {
 	int	idx;

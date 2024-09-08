@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:33:42 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/08 16:53:40 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/08 16:45:31 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@
 # define DELI_REDIR 0
 # define DELI_ETC 1
 
-# define REDIR_O 1 // >
-# define REDIR_I 2 // <
-# define REDIR_AO 3 // >>
-# define REDIR_H 4 // <<
+# define REDIR_O 1
+# define REDIR_I 2
+# define REDIR_AO 3
+# define REDIR_H 4
 
 # define ERROR_QUOTE 0
 
@@ -79,83 +79,67 @@ typedef struct envi
 	char		out_quote;
 }	t_envi;
 
-// error.c
 void	handle_error(int num);
 void	send_errmsg(char *cmd, char *msg, int exitcode);
 int		send_errmsg_in(char *cmd, char *msg, int code);
 
-// free.c
 void	change_data(t_token *token, char *str);
 void	free_tokens(t_token *tokens);
 void	free_proc(t_process *proc);
 void	free_procs(t_process *procs);
 void	free_envi(t_envi *envi);
 
-// syntax_check.c
 int		check_quote(char *line, t_envi *envi);
 int		is_quote(char c, t_envi *envi);
 int		is_deli(char *line, t_envi *envi, int idx);
 int		check_deli(char *line, t_envi *envi, int start, int idx);
 
-// parsing.c
 void	add_token(char *line, t_envi *envi, int start, int idx);
 void	tokenize(char *line, t_envi *envi);
 void	quote_compare(t_envi *envi, char *str, char *tmp);
 void	remove_quote(t_envi *envi);
 void	parsing(char **envp, t_envi *envi, char *str);
 
-// parsing_heredoc.c
 void	change_heredoc(char **line, int idx, char *key, char *val);
 void	remove_heredoc(char **line, int idx, char *key);
 char	*can_change_heredoc(char **envp, char *key);
 void	expand_heredoc(char **envp, char **line);
 
-// heredoc_util.c
 char	*get_key(char *str);
 char	*get_value(char *str);
 
-// expand.c
 void	change_var(t_token *token, char *var, int d_idx, int s_idx);
 void	remove_var(t_token *token, int d_idx);
 void	can_change_var(char **envp, t_token *token, char *str, int d_idx);
 void	expand_var(char **envp, t_envi *envi);
 
-// expand_util.c
 int		is_special_var(t_token *now, int idx, char c);
 void	set_out_quote(char quote, t_envi *envi);
 
-// process.c
 int		redir_check(t_token *token);
 void	push_file(t_token *token, t_process *proc);
 void	push_redir(t_token *token, t_process *proc);
 void	push_proc(t_process *proc);
 void	make_process(t_envi *envi);
 
-// main.c
 void	setting_etc(t_envi *envi);
 void	setting(t_envi *envi);
 char	**copy_envp(char **envp);
 int		ck_line(char *line);
 
-/*****************************************************/
-/* execute */
-// execute.c
 void	execute(t_envi	*envi, char ***envp);
 
-// path.c
 void	ft_execve(t_process *proc, char **envp);
 char	**mk_arg(t_process *proc, char *cmd_path);
 char	*find_path(char *cmd, char **envp);
 char	*mk_cmdpath(char *cmd, char *path);
 char	*path_pointer(char **envp);
 
-// redirect.c
 void	ft_redirect(t_redir *redir, t_file *file, char **join_envp, int std_in);
 int		here_doc(char *del, t_file *file, char **envp, int std_in);
 int		except_heredoc_one(t_redir *redir);
 int		ft_redirect_one(t_redir *redir, t_file *file, char **envp, int std_in);
 
-/* builtin */ // 오류 처리를 어떻게 해야할 지 모르겠음
 int		ft_echo(t_file *file);
 int		ft_pwd(void);
 int		ft_cd(t_file *file, char ***envp);
@@ -164,44 +148,34 @@ int		ft_env(char **envp);
 int		ft_unset(char ***envp, t_file *file);
 void	ft_exit(t_file *file);
 
-// builtin.c
 int		ck_is_builtin(t_process *proc);
 int		exec_builtin(t_process *proc, char ***envp);
 int		ck_export_valid(char *name);
 
-// ft_export.c
 int		find_str(char *en, char *str);
 int		join_envp(char ***envp, char *str);
 
-// handle_lst.c
 int		ft_lstlen(char **lst);
 int		proc_len(t_process *proc);
 int		ft_filelen(t_file *file);
 
-// handle_signal.c
 void	handle_signal(int sig);
 void	handle_signal2(int sig);
 void	handle_signal3(int sig);
 void	init_sig_termi(void);
 void	reset_sig_termi(void);
 
-// handle_fd.c
 void	dup_all(int (*dup_fd)[3]);
 int		dup2_all(int (*dup_fd)[3], int stat);
 
-// handle_free.c
 void	free_str(char **str);
 void	free_lst(char ***lst);
 void	free_arg(int idx, char ***arg);
 
-/* get_next_line */
-// get_next_line.c
 char	*get_next_line(int fd);
 
-// get_next_line_utils.c
 int		ft_strchr_num(const char *s, int c, int *bk_idx);
 
-// exit.c
-int		get_exitcode(pid_t last, int proc_num); // signal 추가 해주기
+int		get_exitcode(pid_t last, int proc_num);
 void	record_exitcode(int code, char ***envp);
 #endif

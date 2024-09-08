@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 15:19:14 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/05 17:06:04 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/08 14:03:17 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// 옵션이 있는지 없는지 판단, 있다면 옵션 아닌 부분을 return 해줌
 static t_file	*over_opt(t_file *file)
 {
 	t_file	*rem;
