@@ -1,55 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_lst.c                                       :+:      :+:    :+:   */
+/*   handle_free.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/22 12:22:28 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/08 12:42:08 by seungbel         ###   ########.fr       */
+/*   Created: 2024/09/08 12:41:10 by seungbel          #+#    #+#             */
+/*   Updated: 2024/09/08 12:55:10 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "minishell.h"
 
-//  char ** 길이를 재는 함수
-int	ft_lstlen(char **lst)
+void	free_str(char **str)
 {
-	int	len;
-
-	len = 0;
-	if (!lst)
-		return (0);
-	while (lst[len])
-		len++;
-	return (len);
+	free(*str);
+	*str = NULL;
 }
 
-// file 길이 구해줌
-int	ft_filelen(t_file *file)
+void	free_lst(char ***lst)
 {
-	int	len;
+	int	idx;
 
-	len = 0;
-	while (file)
+	idx = 0;
+	while ((*lst)[idx])
 	{
-		file = file->next;
-		len++;
+		free((*lst)[idx]);
+		(*lst)[idx] = NULL;
+		idx++;
 	}
-	return (len);
+	free(*lst);
+	*lst = NULL;
 }
 
-// process의 길이를 구해줌
-int	proc_len(t_process *proc)
+void	free_arg(int idx, char ***arg)
 {
-	int	len;
-
-	len = 0;
-	while (proc)
-	{
-		len++;
-		proc = proc->next;
-	}
-	return (len);
+	while (--idx >= 0)
+		free((*arg)[idx]);
+	free(*arg);
+	*arg = NULL;
+	send_errmsg(NULL, " : Malloc Error\n", 1);
 }

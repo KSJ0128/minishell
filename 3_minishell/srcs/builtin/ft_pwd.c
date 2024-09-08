@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:29:31 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/02 18:05:01 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/08 13:01:16 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,6 @@ int	ft_pwd(void)
 	if (!path)
 		return (1);
 	printf("%s\n", path);
-	free(path);
+	free_str(&path);
 	return (0);
 }

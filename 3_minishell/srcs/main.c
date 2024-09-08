@@ -6,7 +6,8 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:32:58 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/05 20:40:54 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/08 12:38:17 by seungbel         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
@@ -77,6 +78,10 @@ int	ck_line(char *line)
 		return (0);
 	return (1);
 }
+// void	mini_leak(void)
+// {
+// 	system("leaks minishell");
+// }
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -84,6 +89,7 @@ int	main(int argc, char **argv, char **envp)
 	char				**envp_cp;
 	t_envi				*envi;
 
+	// atexit(mini_leak);
 	(void)argv;
 	if (argc != 1)
 		handle_error(0);
@@ -102,7 +108,7 @@ int	main(int argc, char **argv, char **envp)
 			record_exitcode(1, &envp_cp);
 		parsing(envp_cp, envi, line);
 		execute(envi, &envp_cp);
-		free_envi(envi);
 	}
+	free_lst(&envp_cp);
 	return (0);
 }

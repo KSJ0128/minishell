@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:47:22 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/05 20:34:52 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/07 22:35:10 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,8 +126,10 @@ void	execute(t_envi	*envi, char ***envp)
 	if (access(".heredoctmp", F_OK) == 0)
 	{
 		unlink(".heredoctmp");
+		free_envi(envi);
 		return ;
 	}
 	if (global_sig == SIGINT || global_sig == SIGQUIT)
 		write(1, "\n", 1);
+	free_envi(envi);
 }

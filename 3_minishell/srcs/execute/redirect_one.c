@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:54 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/05 20:42:09 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/08 13:01:16 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	except_heredoc_type1(int type, char *data)
 		{
 			data = ft_strdup("minishell");
 			write(2, data, ft_strlen(data));
-			free(data);
+			free_str(&data);
 		}
 		else
 			write(2, data, ft_strlen(data));
@@ -49,7 +49,7 @@ int	except_heredoc_type2(char *data)
 		{
 			data = ft_strdup("minishell");
 			write(2, data, ft_strlen(data));
-			free(data);
+			free_str(&data);
 		}
 		else
 			write(2, data, ft_strlen(data));
