@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 17:07:27 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/08 13:11:42 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/09 13:24:24 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	add_token(char *line, t_envi *envi, int start, int idx)
 	if (!str)
 		handle_error(-1);
 	now = envi->tokens;
-	if (now->data == NULL)
+	if (now->data == 0)
 		now->data = str;
 	else
 	{
@@ -30,8 +30,8 @@ void	add_token(char *line, t_envi *envi, int start, int idx)
 		if (!token)
 			handle_error(-1);
 		token->data = str;
-		token->next = NULL;
-		while (now->next != NULL)
+		token->next = 0;
+		while (now->next != 0)
 			now = now->next;
 		now->next = token;
 	}
@@ -80,7 +80,7 @@ void	quote_compare(t_envi *envi, char *str, char *tmp)
 		else if (envi->out_quote != str[idx])
 			tmp[tmp_idx++] = str[idx];
 		else if (envi->out_quote == str[idx])
-			envi->out_quote = NULL;
+			envi->out_quote = 0;
 		idx++;
 	}
 	tmp[tmp_idx] = '\0';
@@ -89,18 +89,26 @@ void	quote_compare(t_envi *envi, char *str, char *tmp)
 void	remove_quote(t_envi *envi)
 {
 	t_token	*now;
-	char	*str;
+	t_token	*prev;
 	char	*tmp;
 
 	now = envi->tokens;
-	while (now != NULL && now->data != NULL)
+	while (now != 0 && now->data != 0)
 	{
-		str = now->data;
-		tmp = (char *)malloc(sizeof(char) * (ft_strlen(str) + 1));
+		tmp = (char *)malloc(sizeof(char) * (ft_strlen(now->data) + 1));
 		if (!tmp)
 			handle_error(-1);
-		quote_compare(envi, str, tmp);
+		quote_compare(envi, now->data, tmp);
+		if (ft_strlen(tmp) == 0)
+		{
+			prev->next = now->next;
+			free(tmp);
+			free(now->data);
+			now = now->next;
+			continue ;
+		}
 		change_data(now, tmp);
+		prev = now;
 		now = now->next;
 	}
 }

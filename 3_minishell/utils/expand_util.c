@@ -6,7 +6,7 @@
 /*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 11:41:14 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/08 16:14:45 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/08 20:13:44 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	is_special_var(t_token *now, int idx, char c)
 void	set_out_quote(char quote, t_envi *envi)
 {
 	if (envi->quote[SINGLE] == 0 && envi->quote[DOUBLE] == 0)
-		envi->out_quote = NULL;
+		envi->out_quote = 0;
 	else if (envi->quote[SINGLE] == 1 && envi->quote[DOUBLE] == 1)
 	{
 		if (quote == '\'')

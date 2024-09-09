@@ -1,46 +1,48 @@
-# target file
 NAME = libft.a
 
-# compile options
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -MMD
-AR = ar -rc
+CFLAG = -Wall -Wextra -Werror -g -fsanitize=address
+ARC = ar -rc
 RM = rm -f
 
-# include directories
-INCLUDES = -I./incs
+FT_C = ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c ft_isascii.c ft_isdigit.c \
+ft_isprint.c ft_itoa.c ft_memchr.c ft_memcmp.c ft_memcpy.c ft_memmove.c ft_memset.c ft_putchar_fd.c \
+ft_putstr_fd.c ft_split.c ft_strchr.c ft_strdup.c ft_striteri.c ft_strjoin.c ft_strlcat.c ft_strlcpy.c \
+ft_strlen.c ft_strmapi.c ft_strncmp.c ft_strnstr.c ft_strrchr.c ft_strtrim.c ft_substr.c ft_tolower.c \
+ft_putendl_fd.c ft_putnbr_fd.c ft_toupper.c ft_split.c ft_strcmp.c
 
-# source files
-SRCS_DIR = srcs
-OBJS_DIR = objs
+FT_O = $(FT_C:.c=.o)
 
-SRCS := $(shell find $(SRCS_DIR) -type f -name '*.c')
-OBJS := $(patsubst $(SRCS_DIR)/%.c,$(OBJS_DIR)/%.o,$(SRCS))
+BONUS_C = ft_lstadd_back_bonus.c ft_lstadd_front_bonus.c ft_lstclear_bonus.c ft_lstdelone_bonus.c \
+ft_lstiter_bonus.c ft_lstlast_bonus.c ft_lstmap_bonus.c ft_lstnew_bonus.c ft_lstsize_bonus.c
 
-DEPS := $(OBJS:.o=.d)
+BONUS_O = $(BONUS_C:.c=.o)
 
-# build the library
-all: $(NAME)
+FT_H = libft.h
 
-$(NAME): $(OBJS)
-	$(AR) $@ $^
+ifdef BONUS
+	OBJS = $(FT_O) $(BONUS_O)
+else
+	OBJS = $(FT_O)
+endif
 
-$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDES)
+all : $(NAME)
 
-# handle dependencies
--include $(DEPS)
+bonus :
+	make BONUS=1
 
-# clean up object files and dependency files
-clean:
-	$(RM) $(OBJS) $(DEPS)
+$(NAME) : $(OBJS)
+	$(ARC) $@ $^
 
-# clean up all, including the library
-fclean: clean
+%.o : %.c
+	$(CC) $(CFLAG) -c $< -o $@ -I $(FT_H)
+
+clean :
+	$(RM) $(FT_O) $(BONUS_O)
+
+fclean : clean
 	$(RM) $(NAME)
 
-# rebuild the library
-re: fclean all
+re : fclean all
 
-# phony targets
-.PHONY: all clean fclean re bonus
+.PHONY : all bonus clean fclean re

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungbel <seungbel@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:32:58 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/08 18:57:44 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/09 13:21:44 by seojkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	setting_etc(t_envi *envi)
 {
 	envi->quote[SINGLE] = 0;
 	envi->quote[DOUBLE] = 0;
-	envi->out_quote = NULL;
+	envi->out_quote = 0;
 }
 
 void	setting(t_envi *envi)
@@ -26,14 +26,14 @@ void	setting(t_envi *envi)
 	envi->tokens = (t_token *)malloc(sizeof(t_token));
 	if (!(envi->tokens))
 		exit(-1);
-	envi->tokens->data = NULL;
-	envi->tokens->next = NULL;
+	envi->tokens->data = 0;
+	envi->tokens->next = 0;
 	envi->procs = (t_process *)malloc(sizeof(t_process));
 	if (!(envi->procs))
 		exit(-1);
-	envi->procs->files = NULL;
-	envi->procs->redirs = NULL;
-	envi->procs->next = NULL;
+	envi->procs->files = 0;
+	envi->procs->redirs = 0;
+	envi->procs->next = 0;
 	setting_etc(envi);
 }
 
@@ -66,15 +66,18 @@ char	**copy_envp(char **envp)
 
 int	ck_line(char *line)
 {
+	int	idx;
+
 	if (!line)
 	{
 		printf("\033[1A\033[12Cexit\n");
 		exit(0);
 	}
+	idx = 0;
 	if (!(*line))
 	{
 		free(line);
-		line = NULL;
+		line = 0;
 		return (0);
 	}
 	return (1);
