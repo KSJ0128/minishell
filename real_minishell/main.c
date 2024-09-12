@@ -6,13 +6,11 @@
 /*   By: seungbel <seungbel@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:32:58 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/09 21:58:18 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/10 14:06:13 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int		g_sig;
 
 void	setting_etc(t_envi *envi)
 {

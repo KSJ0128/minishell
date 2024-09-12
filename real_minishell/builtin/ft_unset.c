@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 14:18:12 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/09 23:17:42 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/10 13:14:57 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,6 @@ int	remove_envp(char ***envp, char ***tmp, t_file *file)
 	return (0);
 }
 
-void	init_flag_cmd(int *flag, char **cmd)
-{
-	*flag = 0;
-	*cmd = 0;
-}
-
-void	set_flag_cmd(int *flag, char **cmd, t_file *file)
-{
-	*flag = 1;
-	*cmd = file->data;
-}
-
 int	ft_unset(char ***envp, t_file *file)
 {
 	char	**tmp;
@@ -68,12 +56,14 @@ int	ft_unset(char ***envp, t_file *file)
 
 	if (!file)
 		return (0);
-	init_flag_cmd(&flag, &cmd);
+	cmd = 0;
+	flag = 0;
 	while (file)
 	{
 		if (!ck_export_valid(file->data))
 		{
-			set_flag_cmd(&flag, &cmd, file);
+			cmd = file->data;
+			flag = send_errmsg_in(cmd, ": not a valid identifier\n", 1);
 			file = file->next;
 			continue ;
 		}
@@ -83,7 +73,5 @@ int	ft_unset(char ***envp, t_file *file)
 			send_errmsg("minishell", " : malloc Error\n", 1);
 		file = file->next;
 	}
-	if (flag)
-		return (send_errmsg_in(cmd, ": not a valid identifier\n", 1));
-	return (0);
+	return (flag);
 }

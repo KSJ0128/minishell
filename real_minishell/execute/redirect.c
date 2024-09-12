@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:52:18 by seungbel          #+#    #+#             */
-/*   Updated: 2024/09/09 21:07:59 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/10 13:05:38 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,10 @@ int	push_file_in_heredoc(t_file *file)
 	if (g_sig == 0)
 		new->data = ft_strdup(".heredoctmp");
 	else
+	{
+		free(new);
 		return (1);
+	}
 	if (!new->data)
 		send_errmsg_in("minishell", " : Malloc error\n", 1);
 	new->next = NULL;

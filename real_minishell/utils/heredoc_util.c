@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_util.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seojkim <seojkim@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: seungbel <seungbel@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 11:32:07 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/08 11:48:17 by seojkim          ###   ########.fr       */
+/*   Updated: 2024/09/10 14:28:18 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,10 @@ char	*get_value(char *str)
 
 	idx = 0;
 	while (str[idx] != '=')
+	{
+		if (str[idx] == '\0')
+			return (str + idx);
 		idx++;
+	}
 	return (str + idx + 1);
 }
