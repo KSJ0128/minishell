@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:57:38 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/09 21:25:29 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/10 14:31:05 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,21 @@ void	delete_token(t_envi *envi, t_token **now, t_token **prev)
 	next = (*now)->next;
 	free(*now);
 	(*now) = next;
+}
+
+void	print_envp(char *str)
+{
+	char	*key;
+	char	*value;
+
+	key = get_key(str);
+	value = get_value(str);
+	printf("%s", key);
+	if (*value)
+	{
+		printf("=\"");
+		printf("%s\"", value);
+	}
+	printf("\n");
+	free(key);
 }

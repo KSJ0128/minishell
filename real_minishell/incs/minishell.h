@@ -6,7 +6,7 @@
 /*   By: seungbel <seungbel@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 13:33:42 by seojkim           #+#    #+#             */
-/*   Updated: 2024/09/09 21:57:46 by seungbel         ###   ########.fr       */
+/*   Updated: 2024/09/10 14:06:52 by seungbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@
 # include "readline.h"
 # include "history.h"
 
-extern int			g_sig;
+int					g_sig;
 
 typedef struct token
 {
@@ -184,4 +184,5 @@ void				record_exitcode(int code, char ***envp);
 
 int					valid_quote(char *line);
 void				delete_token(t_envi *envi, t_token **now, t_token **prev);
+void				print_envp(char *str);
 #endif
